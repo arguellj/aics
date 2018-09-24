@@ -5,45 +5,45 @@ The style file: splncs03.bst
 Database file #1: aics-sample.bib
 Warning--there's a number but no volume in VanDerPol2016
 Warning--there's a number but no volume in Wang2016
-You've used 19 entries,
+You've used 18 entries,
             2785 wiz_defined-function locations,
-            726 strings with 12712 characters,
-and the built_in function-call counts, 17850 in all, are:
-= -- 1239
-> -- 1263
-< -- 19
-+ -- 509
-- -- 490
-* -- 1427
-:= -- 2480
-add.period$ -- 23
-call.type$ -- 19
-change.case$ -- 308
+            717 strings with 9431 characters,
+and the built_in function-call counts, 11871 in all, are:
+= -- 930
+> -- 566
+< -- 18
++ -- 230
+- -- 212
+* -- 847
+:= -- 1598
+add.period$ -- 22
+call.type$ -- 18
+change.case$ -- 166
 chr.to.int$ -- 0
-cite$ -- 21
-duplicate$ -- 1296
-empty$ -- 1087
-format.name$ -- 506
-if$ -- 3549
+cite$ -- 20
+duplicate$ -- 974
+empty$ -- 897
+format.name$ -- 228
+if$ -- 2477
 int.to.chr$ -- 0
-int.to.str$ -- 19
-missing$ -- 380
-newline$ -- 62
-num.names$ -- 38
-pop$ -- 702
+int.to.str$ -- 18
+missing$ -- 232
+newline$ -- 59
+num.names$ -- 36
+pop$ -- 411
 preamble$ -- 1
-purify$ -- 283
+purify$ -- 142
 quote$ -- 0
-skip$ -- 272
+skip$ -- 259
 stack$ -- 0
-substring$ -- 557
-swap$ -- 886
-text.length$ -- 19
+substring$ -- 534
+swap$ -- 581
+text.length$ -- 18
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 72
+type$ -- 70
 warning$ -- 2
-while$ -- 92
-width$ -- 21
-write$ -- 208
+while$ -- 87
+width$ -- 20
+write$ -- 198
 (There were 2 warnings)

@@ -66,45 +66,13 @@ Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A.A., Veness, J., Bellemare, M.G.,
   Legg, S., Hassabis, D.: {Human-level control through deep reinforcement
   learning}. Nature  518(7540),  529--533 (2015)
 
-\bibitem{Mnih2015a}
-Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A.A., Veness, J., Bellemare, M.G.,
-  Graves, A., Riedmiller, M., Fidjeland, A.K., Ostrovski, G., Petersen, S.,
-  Beattie, C., Sadik, A., Antonoglou, I., King, H., Kumaran, D., Wierstra, D.,
-  Legg, S., Hassabis, D., van Hasselt, H., Guez, A., Silver, D., Sorokin, I.,
-  Seleznev, A., Pavlov, M., Fedorov, A., Ignateva, A., Silver, D., Huang, A.,
-  Maddison, C.J., Guez, A., Sifre, L., van~den Driessche, G., Schrittwieser,
-  J., Antonoglou, I., Panneershelvam, V., Lanctot, M., Dieleman, S., Grewe, D.,
-  Nham, J., Kalchbrenner, N., Sutskever, I., Lillicrap, T., Leach, M.,
-  Kavukcuoglu, K., Graepel, T., Hassabis, D., Schaul, T., Quan, J., Antonoglou,
-  I., Silver, D., Rusu, A.A., {Gomez Colmenarejo}, S., Gulcehre, C.,
-  Desjardins, G., Kirkpatrick, J., Pascanu, R., Mnih, V., Kavukcuoglu, K.,
-  Hadsell, R., Radford, A., Metz, L., Chintala, S., {\'{O}}lafsd{\'{o}}ttir,
-  H.F., Barry, C., Saleem, A.B., Hassabis, D., Spiers, H.J., Mnih, V.,
-  Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D.,
-  Riedmiller, M., Le, Q.V., Ranzato, M., Monga, R., Devin, M., Chen, K.,
-  Corrado, G.S., Dean, J., Ng, A.Y., Mnih, V., Kavukcuoglu, K., Silver, D.,
-  Rusu, A.A., Veness, J., Bellemare, M.G., Graves, A., Riedmiller, M.,
-  Fidjeland, A.K., Ostrovski, G., Petersen, S., Beattie, C., Sadik, A.,
-  Antonoglou, I., King, H., Kumaran, D., Wierstra, D., Legg, S., Hassabis, D.,
-  {\'{O}}lafsd{\'{o}}ttir, H.F., Barry, C., Saleem, A.B., Hassabis, D., Spiers,
-  H.J., Schaul, T., Quan, J., Antonoglou, I., Silver, D., Rusu, A.A., {Gomez
-  Colmenarejo}, S., Gulcehre, C., Desjardins, G., Kirkpatrick, J., Pascanu, R.,
-  Mnih, V., Kavukcuoglu, K., Hadsell, R., van Hasselt, H., Guez, A., Silver,
-  D., Gregor, K., Danihelka, I., Graves, A., {Jimenez Rezende}, D., Wierstra,
-  D., Kalchbrenner, N., Danihelka, I., Graves, A., Lange, S., Gabel, T.,
-  Riedmiller, M., Kalchbrenner, N., Danihelka, I., Graves, A., Gregor, K.,
-  Danihelka, I., Graves, A., {Jimenez Rezende}, D., Wierstra, D.: {Prioritized
-  Experience Replay}. International Conference in Machine Learning  4(7540),
-  ~14 (2015),
-  \url{http://arxiv.org/abs/1507.01526{\%}5Cnhttp://dx.doi.org/10.1007/978-3-642-27645-3{\_}2{\%}5Cnhttp://arxiv.org/abs/1112.6209{\%}5Cnhttp://arxiv.org/abs/1509.06461{\%}5Cnhttp://www.arxiv.org/pdf/1509.06461.pdf{\%}5Cnhttp://arxiv.org/abs/1511.06295{\%}5Cnhttp://arxiv.org/abs/151}
-
-\bibitem{Puterman:1994:MDP:528623}
-Puterman, M.L.: {Markov Decision Processes: Discrete Stochastic Dynamic
-  Programming}. John Wiley {\&} Sons, Inc., New York, NY, USA, 1st edn. (1994)
-
 \bibitem{RichardS.SuttonandAndrewG.Barto2018}
 {Richard S. Sutton and Andrew G. Barto}: {Reinforcement Learning, Second
   Edition An Introduction}. MIT Press, second edi edn. (2018)
+
+\bibitem{SchaulQAS15}
+Schaul, T., Quan, J., Antonoglou, I., Silver, D.: Prioritized experience
+  replay. CoRR  abs/1511.05952 (2015), \url{http://arxiv.org/abs/1511.05952}
 
 \bibitem{Tampuu2015}
 Tampuu, A., Matiisen, T., Kodelja, D., Kuzovkin, I., Korjus, K., Aru, J., Aru,
