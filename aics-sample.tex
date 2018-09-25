@@ -117,9 +117,13 @@ A fingerprint technique was introduced in \cite{Foerster2017}, which states that
 
 Based on the results of the study, a fingerprint must be correlated with the true value of state-action pairs given the other agents' policies. It should gradually change over training time in order to allow the model to generalise across experiences in which the other agents execute policies as they learn.
 
-\section{Design}
+\subsection{Related Work}
 
-This section outlines the approach used to design the different components of the UTC problem as a DRL problem.
+Prior to RDL, several RL approaches for heterogenous multi-agent UTC environments were done as in \cite{Dusparic2016,Chu2017,Tahifa2015,El-Tantawy2012}. However, the techniques used cannot be extended to DRL. Recent works started to explore DRL solutions for UTC in single agent scenarios to deal with the curse of dimensionality as in \cite{Li2016,Mousavi2017,Gao2017,Liang2018}. These studies started to represent the state as snapshots of the intersection in order to use Convolutional Neural Networks. The variables obtained from the images are position and speed of vehicles, however those are processed and expressed differently on each study.
+
+The DNNs architecture are getting more complex over the years. First approaches only considered a simple CNN, but later on the new techniques were aggregated to improve the stability and performance of the training such as DDQN, Dueling Networks and Prioritized Experience Replay. All these single agent approaches obtained good results. Because of that, they were extended to multi-agent scenarios as in \cite{Belletti2018,VanDerPol2016,Liu2017CooperativeDR}. \cite{Belletti2018} used DRL for controlling the metering of highway on-ramps modelling the problem as discretized non-linear partial differential equations in a robust and non-parametric manner. \cite{VanDerPol2016,Liu2017CooperativeDR} implemented solutions for homogeneous multi-agent by taking advantage of the similarity in order to train only one Neural Network which can be used for all agents indistinctly. \cite{VanDerPol2016} used transfer planning and max-plus algorithm. While, \cite{Liu2017CooperativeDR} used a IQL variation where only one agent is trained at each training episode, and the others react based on their previously learned policies. After an amount of iterations, the latest agent's policy is distributed to the other agents, and the training agent is changed to another one to start a new training cycle. 
+
+\section{Design}
 
 \subsection{State Representation}\label{sec:stateRep}
 
@@ -252,7 +256,7 @@ We select two metrics that have been used in several DRL studies for UTC. Every 
 \begin{itemize}
 	\item \textbf{Cumulative Reward}. The reward \textit{r$_{t}$} taken on every time step \textit{t} is accumulated until the episode is finished.
 	
-	\item \textbf{Average Waiting Time}. Let \textit{w$_{t}^{i}$} be the ith vehicle's waiting time at time step \textit{t}. Let \textit{W$_{t}$} be the sum of all vehicles' waiting times at the time step \textit{t}. The average is the sum of all \textit{W$_{t}$} divided by the number of time steps in the episode (N) as shown in Equation \ref{eq:AWT}. SUMO defines the waiting time for a vehicle as the time (in seconds) spent with a speed below 0.1 m/s since the last time it was faster than 0.1 m/s.
+	\item \textbf{Average Waiting Time}. It is is the sum of all \textit{W$_{t}$} divided by the number of time steps in the episode (N) as shown in Equation \ref{eq:AWT}. SUMO defines the waiting time for a vehicle as the time (in seconds) spent with a speed below 0.1 m/s since the last time it was faster than 0.1 m/s.
 \begin{equation}\label{eq:AWT}
 AWT = \frac{\sum^{t=1}_{N}{W_{t}}}{N}
 \end{equation}
