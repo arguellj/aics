@@ -285,39 +285,49 @@ Every technique is tested in the following scenarios:
 
 \subsection{Experiments}
 
-The Figures \ref{fig:LowIDQNExp} and Figure \ref{fig:HighIDQNExp} present the experiments executed in low and high traffic load respectively.
+The Figure \ref{fig:LowHighIDQNExp} presents the results of the experiments executed in low and high traffic load respectively.
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=\textwidth]{images/Low-Load-REW.png}
-  		\caption{Cumulative Rewards per Episode}
+  		\caption{Low Traffic: Cumulative Rewards}
   		\label{fig:LowIDQNREW}
     \end{subfigure}
     \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=\textwidth]{images/Low-Load-AWT.png}
-  		\caption{Average Waiting Time per Episode}
+  		\caption{Low Traffic: Average Waiting Time}
   		\label{fig:LowIDQNAWT}
     \end{subfigure}
-    \caption{Low Traffic IDQN Experiments}\label{fig:LowIDQNExp}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \begin{subfigure}[b]{0.48\textwidth}
+     \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=\textwidth]{images/High-Load-REW.png}
-  		\caption{Cumulative Rewards per Episode}
+  		\caption{High Traffic: Cumulative Rewards}
   		\label{fig:HighIDQNREW}
     \end{subfigure}
     \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=\textwidth]{images/High-Load-AWT.png}
-  		\caption{Average Waiting Time per Episode}
+  		\caption{High Traffic: Average Waiting Time}
   		\label{fig:HighIDQNAWT}
     \end{subfigure}
-    \caption{High Traffic IDQN Experiments}\label{fig:HighIDQNExp}
+    \caption{IDQN Experiments - Results per Episode}\label{fig:LowHighIDQNExp}
 \end{figure}
 
-As can be seen from Figure \ref{fig:LowIDQNREW}, \textit{FT} gets a constant reward range that varies extremely low around 50 due to it does not adjust its performance. Also, \textit{EMR Disabled} gets very bad rewards, even worse than the FT, and it never learns. Therefore, disabling the experience replay is not useful for our problem. Finally, we compare \textit{PERM} and \textit{PERM + FP}, which show identical performance getting 400$\%$ bigger rewards than \textit{FT}. They also learn very well in spite of the non-stationarity, increasing the rewards from around 25-100 in the exploration phase up to around 200-250 in the exploitation phase. They reach their optimal point at 300 episodes, where they get to keep a stable rewarding. Based on this similarity of results, we deduce that the fingerprint is not helping.
+%\begin{figure}
+ %   \centering
+  %  \begin{subfigure}[b]{0.48\textwidth}
+   %     \includegraphics[width=\textwidth]{images/High-Load-REW.png}
+  	%	\caption{Cumulative Rewards per Episode}
+  	%	\label{fig:HighIDQNREW}
+    %\end{subfigure}
+    %\begin{subfigure}[b]{0.48\textwidth}
+     %   \includegraphics[width=\textwidth]{images/High-Load-AWT.png}
+  		%\caption{Average Waiting Time per Episode}
+  		%\label{fig:HighIDQNAWT}
+    %\end{subfigure}
+    %\caption{High Traffic IDQN Experiments}\label{fig:HighIDQNExp}
+%\end{figure}
+
+As can be seen from the Figure \ref{fig:LowIDQNREW}, \textit{FT} gets a constant reward range that varies extremely low around 50 due to it does not adjust its performance. Also, \textit{EMR Disabled} gets very bad rewards, even worse than the FT, and it never learns. Therefore, disabling the experience replay is not useful for our problem. Finally, we compare \textit{PERM} and \textit{PERM + FP}, which show identical performance getting 400$\%$ bigger rewards than \textit{FT}. They also learn very well in spite of the non-stationarity, increasing the rewards from around 25-100 in the exploration phase up to around 200-250 in the exploitation phase. They reach their optimal point at 300 episodes, where they get to keep a stable rewarding. Based on this similarity of results, we deduce that the fingerprint is not helping.
 
 As illustrated in figure \ref{fig:HighIDQNREW}, \textit{FT} seems to make a good job in this scenario along with \textit{PERM}, both outperforms \textit{EMR Disabled} and \textit{PERM + FP} in around 25$\%$. It seems that the extra layer of the fingerprint reduces the performance of the technique under intense traffic loads. Moreover, none DRL technique gets to learn over the episodes. This can indicate that the agents needs more training for such a high load. 
 
