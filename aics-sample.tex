@@ -22,7 +22,7 @@
 
 \begin{abstract}
 
-Reinforcement Learning (RL) has been extensively used in urban traffic control (UTC) optimization due its capability to learn the dynamic of complex problems from interactions with the environment. Recent advances in Deep Reinforcement Learning (DRL) have opened up the possibilities for extending this work to more complex situations due to it overcoming the curse of dimensionality resulting from the exponential growth of the state and action spaces when incorporating fine-grained information. DRL has been shown to work very well for UTC on a single intersection. Nonetheless, when the problem is expanded to multiple intersections, the need for coordination becomes too complex and DRL training time too large, and as a result, DRL approaches rely on the similarity of junctions to train the agents controlling them as one. However, assuming homogeneity of junctions is not realistic, as a city has a wife range of different layouts of intersections.
+Reinforcement Learning (RL) has been extensively used in urban traffic control (UTC) optimization due its capability to learn the dynamic of complex problems from interactions with the environment. Recent advances in Deep Reinforcement Learning (DRL) have opened up the possibilities for extending this work to more complex situations due to it overcoming the curse of dimensionality resulting from the exponential growth of the state and action spaces when incorporating fine-grained information. DRL has been shown to work very well for UTC on a single intersection. Nonetheless, when the problem is expanded to multiple intersections, the need for coordination becomes too complex and DRL training time too large, and as a result, DRL approaches rely on the similarity of junctions to train the agents controlling them as one. However, assuming homogeneity of junctions is not realistic, as a city has a wide range of different layouts of intersections.
 
 This study proposes the usage of Independent Deep Q-Network (IDQN) to train heterogeneous multi-agents to deal with both the curse of dimensionality and the need for coordination. The approach uses Deep Q-Networks (DQN) to address state space explosion and coordination of heterogeneous junctions is addressed by simultaneously but separately training each agent. However, this technique can lead to convergence problems because one agent's learning makes the environment appear non-stationary to other agents, and this problem conflicts with experience replay memory on which DQN relies. We therefore condition each agent's value function on a fingerprint that disambiguates the age of the data sampled from the replay memory to mitigate effects of other agents affecting the environment. 
 
@@ -38,13 +38,19 @@ The approach is evaluated on three connected junctions with different layouts in
 This research addresses heterogeneous multi-agents for  urban traffic control (UTC) systems as the first study applying Deep Reinforcement Leaning (DRL) in a heterogeneous network layout which is a reflection of the cities in the real world. It proposes the usage of DRL to deal with the curse of dimensionality that suffers RL approaches by using Neural Networks. It also uses Indepedent Q-Learning (IQL), where each agent learns independently and simultaneously its own policy, treating other agents as part of the environment. However, the environment becomes nonstationary from the point of view of each agent, as it involves the interaction with other agents who are themselves learning at the same time, ruling out any convergence guarantees. The technique used for this problem is Deep Q-Networks which relies in a component so called experience replay memory in order to stabilize and improve the learning. However, this memory is incompatible with non-stationary environments. In order to combine the experience replay memory and IQL, we used a technique of fingerprinting which stabilizes the memory against the non-stationarity. This fingerprint disambiguates the age of the data sampled from the replay memory. We evaluate the usage of IQL with Deep Q-Networks in a multi-agent setting by using a simulation of an urban traffic control system.
 
 
-\section{Background and Related Work}
+\section{Related Work}
 
-\subsection{Reinforcement Learning}
+RL has been extensively applied in UTC, with some of the most advanced approaches addressing multi-agent multi-objective heterogenous scenarios \cite{Dusparic2016, El-Tantawy2012}. To enable using image snapshosts of the intersection as input, while dealing with the curse of dimensionality, more recent work started exploring DRL and Convolutional Neural Networks (CNN) solutions in single agent scenarios \cite{Mousavi2017,Liang2018}. Multi-agent DRL work is currently limited to solutions for homogeneous multi-agent by taking advantage of the similarity in order to train only one neural network which can be used for all agents indistinctly.\cite{VanDerPol2016} used transfer learning to transfer the learnt actions across the agents, while in \cite{Liu2017CooperativeDR} only one agent is trained at each training episode, and the others react based on their previously learned policies. However, in the cases where junctions are heterogenous, the knowledge is not directly reusable, and agents need to be trained separately to account for the potential impact of other agents' actions on its own environment. In the section we introduce the details of our approach addressing these issues. 
 
-Reinforcement learning (RL) is about learning optimal actions from specific situations where the agent has to discover which actions maximize a reward signal by exploring them in a trial-and-error basis. These actions may affect future situations and subsequent reward signals \cite{RichardS.SuttonandAndrewG.Barto2018}.
+\section{Design}
+%TODO: give some sort of an intro of what this section does and why
+%\subsection{Background and the techniques used}
 
-In RL an agent interacts with the environment. On each time step t, the agent perceives an state \textit{s$_{t}$} in state space \textit{S} from where it selects an action \textit{a$_{t}$} in the action space \textit{A} by following a policy \textit{$\pi$}. The agent receives a reward \textit{r$_{t}$} when it transitions to the state \textit{s$_{t+1}$} according to the environment dynamics, the reward function  \textit{R(s$_{t}$, a$_{t}$, s$_{t+1}$)} and the transition function \textit{T(s$_{t}$, a$_{t}$, s$_{t+1}$)}. In order to converge the algorithm faster, a discount factor $\gamma$ $\in$ [0, 1] is applied to the total amount of reward.
+\subsection{Deep Reinforcement Learning}
+
+Reinforcement learning (RL) learns optimal actions for specific environment conditions by trial-and-error learning to maximize the long term reward signal \cite{RichardS.SuttonandAndrewG.Barto2018}.
+
+At each time step t, the agent perceives a state \textit{s$_{t}$} in state space \textit{S} from which it selects an action \textit{a$_{t}$} in the action space \textit{A} by following a policy \textit{$\pi$}. The agent receives a reward \textit{r$_{t}$} when it transitions to the state \textit{s$_{t+1}$} according to the environment dynamics, the reward function  \textit{R(s$_{t}$, a$_{t}$, s$_{t+1}$)} and the transition function \textit{T(s$_{t}$, a$_{t}$, s$_{t+1}$)}. Discount factor $\gamma$ $\in$ [0, 1] is applied to the future rewards.
 
 RL can be either model-based or model-free (where the transition and the reward functions are unknown). The most common model-free technique is Q-Learning, where RL agents learn Q-values which are functions of state-action pair that returns a real value: \textit{Q: S} x \textit{A $\rightarrow$ $\mathbb{R}$}. Thus, the policy is represented as:
 
@@ -60,12 +66,9 @@ Q(s, a) = (1 - \alpha)Q(s, a) + \alpha[R(s, a) + \max_{a \in A}Q(s', a')]
 
 where 0 $<$ $\alpha$ $\leq$ 1 is a learning rate.
 
+In situations with a large state and action spaces it is unfeasible to learn Q value estimates for each state and action pair independently as in standard tabular Q-Learning. Therefore, DRL models the components of RL with deep neural networks. There are multiple variations and extensions of the basic DRL model, so in the following subsections we describe the methods our approach utilizes to develop DRL algorithm applicable in heterogeneous UTC scenarios. 
 
-\subsection{Deep Reinforcement Learning}
-
-The curse of dimensionality given by large state and action spaces make unfeasible to learn Q value estimates for each state and action pair independently as in normal tabular Q-Learning. Therefore, DRL models the components of RL with deep neural networks. The following subsections describe the methods used during the proposed research to implement the Deep Reinforcement Learning in Traffic Light problem.
-
-\subsubsection{Deep Q Networks}
+\paragraph{Deep Q Networks}
 
 \cite{Mnih2015} proposed Deep Q-Networks (DQN) as a technique to combine Q-Learning with deep neural networks. RL is known to be unstable or even to diverge when a non-linear function approximator such as a neural network is used to represent the Q value. DQN addresses these instabilities by using two insights, experience replay and target network.
 	
@@ -77,7 +80,7 @@ L_{i}(\theta_{i}) = \ E_{(s,a,r,s) \sim U(D)} \left[ \left(r + \gamma \max_{a'}Q
 
 where $\theta_{i}$ are the parameters of the Q-network at iteration i and $\theta_{i}^{-}$ are the target network parameters. The target network parameters are only updated with the Q-network parameters every C steps and are held fixed between individual updates.
 
-\subsubsection{Double DQN}
+\paragraph{Double DQN}
 
 	The max operator in standard Q-learning and DQN uses the same values both to select and to evaluate an action. It is known the this maximization sometimes produces to learn unrealistically high action values which tends to prefer overestimated values over underestimated values, resulting in overoptimistic value estimations. To prevent this, Double Q-learning decouples the selection and the evaluation \cite{Hasselt2010}.
 	
@@ -87,7 +90,7 @@ where $\theta_{i}$ are the parameters of the Q-network at iteration i and $\thet
 Y_{t}^{DDQN} = R_{t+1} + \gamma Q(s_{t+1}, \argmax_{a} Q(s_{t+1}, a;\theta_{t});\theta_{i}^{-})
 \end{equation}
 
-\subsubsection{Prioritized Experience Replay}
+\paragraph{Prioritized Experience Replay}
 
 \cite{SchaulQAS15} presented prioritized experience replay which detaches agents from considering transitions with the same frequency that they are experienced. Prioritized replay samples more frequently transitions from which there is a high expected learning progress. as measured by the magnitude of their temporal-difference (TD) error. It samples transitions with probability p$_{t}$ relative to the last encountered absolute TD error:
 	
@@ -97,7 +100,7 @@ p_{t} \propto \left|\left(R_{t+1} + \gamma_{t+1} \max_{a'}Q\left(s',a';\theta_{i
 
 Where $\omega$ is a hyper-parameter that determines the pattern of the distribution. New transitions are pushed into the replay buffer memory with maximum priority, providing a bias towards recent transitions.
 
-\subsubsection{Dueling Network}\label{duelingNet}
+\paragraph{Dueling Network}\label{duelingNet}
 
 Dueling Network is a technique proposed by \cite{Wang2016} which computes separately the value V(s) and advantage A(s, a) functions that are represented by a duelling architecture that consists of two streams where each stream represents one of these functions. These two streams are combined by an convolutional layer to produce an estimate of the state-action value Q(s, a). The dueling network automatically produces separate estimates of the state value and advantage functions without supervision. Besides that, it can learn which states are valuable, without having to explore the consequence of each action for each state. Dueling network is defined with the equation:
 
@@ -107,14 +110,18 @@ Q(s,a;\theta,\alpha,\beta) = V(s;\theta,\beta) + \left( A\left(s,a;\theta,\alpha
 	
 \subsection{Multi-Agent Reinforcement Learning} \label{sec:MARL}
 
+%TODO: why are we explaining this?
+
 Consider a cooperative multi-agent environment where \textit{n} agents identified by a $\epsilon$ A $\equiv$ $\{$1,..., n$\}$ participate in a stochastic game G, denoted by a tuple $<$S, U, P, r, Z, O, n, $\gamma>$. The environment consists of states s$_{t}$ $\epsilon$ S, where at every time step t, each agent takes an action \textit{u$^{a}_{t}$} $\epsilon$ U, forming a joint action \textbf{u$_{t}$} $\epsilon$ \textbf{U} $\equiv$ U$^{n}$.
 The transition probabilities are defined by P(s$_{t+1}$ $|$ s$_{t}$, u$_{t}$) : S x U x S $\rightarrow$ [0, 1]. A global reward function r(s$_{t}$, u$_{t}$) : S x U $\rightarrow$ $\mathbb{R}$ is shared between all the agents.
 
 Each agent's observations z $\epsilon$ Z follows an observation function O(s$_{t}$, a) : S x A $\rightarrow$ Z. Each agent \textit{a} conditions its behaviour on its own action-observation history $\tau_{a}$ $\epsilon$ T $\equiv$ (Z x U)*, according to its policy $\pi_{a}$(u$_{a}$ $|$ $\tau_{a}$) : T x U $\rightarrow$ [0, 1]. After each transition, the action u$_{t}^{a}$ and new observation O(s$_{t}$, a) are added to $\tau_{a}$, forming $\tau_{a}^{'}$. Let the joint quantities over agents be in bold, and the joint quantities over agents other than \textit{a} with the subscript \textit{-a}, so that, e.g., \emph{u} = [u$_{t}^{t}$, \textbf{u}$_{-a}$].
 
-\subsubsection{Independent DQN}
+\paragraph{Independent DQN}
 
-Independent DQN (IDQN) is an extension of Independent Q-Learning\cite{Tan1993} with DQN for cooperative multi-agent environment, where each agent \textit{a} observes the partial state s$_{t}^{a}$, selects an individual action \textit{u$_{t}^{a}$}, and receives a team reward, r$_{t}$ shared among all agents. \cite{Tampuu2015} combines DQN with independent Q-learning, where each agent \textit{a} independently and simultaneously learns its own Q-function \textit{Q$^{a}(s, u^{a};\theta^{a}_{i})$} \cite{DBLP:journals/corr/FoersterAFW16a}. Since our setting is partially observable, IDQN can be implemented by having each agent conditioned on its action-observation history, i.e., Q$_{a}$($\tau_{a}$, u$_{a}$). In DRL, this can be implemented by given to each agent a DQN on its own observations and actions.
+Independent DQN (IDQN) is an extension of Independent Q-Learning (IQL)\cite{Tan1993} with DQN for cooperative multi-agent environment, where each agent \textit{a} observes the partial state s$_{t}^{a}$, selects an individual action \textit{u$_{t}^{a}$}, and receives a team reward, r$_{t}$ shared among all agents. \cite{Tampuu2015} combines DQN with independent Q-learning, where each agent \textit{a} independently and simultaneously learns its own Q-function \textit{Q$^{a}(s, u^{a};\theta^{a}_{i})$} \cite{DBLP:journals/corr/FoersterAFW16a}. Since our setting is partially observable, IDQN can be implemented by having each agent conditioned on its action-observation history, i.e., Q$_{a}$($\tau_{a}$, u$_{a}$). In DRL, this can be implemented by given to each agent a DQN on its own observations and actions.
+
+\paragraph{Fingerprinting in IQL}
 
 As mentioned before, a key component of DQN is the experience replay memory.  Unfortunately, the combination of experience replay with IQL appears to be problematic because the non-stationarity introduced by IQL which provokes that the dynamics that generated the data in the agent's experience replay memory no longer indicate the current dynamics in which the agent is learning.
 
@@ -122,15 +129,11 @@ A fingerprint technique was introduced in \cite{Foerster2017}, which states that
 
 Based on the results of the study, a fingerprint must be correlated with the true value of state-action pairs given the other agents' policies. It should gradually change over training time in order to allow the model to generalise across experiences in which the other agents execute policies as they learn.
 
-\subsection{Related Work}
 
-RL has been extensively applied in UTC, with some of the most advanced approaches addressing multi-agent multi-objective heterogenous scenarios \cite{Dusparic2016, El-Tantawy2012}. To enable using image snapshosts of the intersection as input, while dealing with the curse of dimensionality, more recent work started exploring DRL and Convolutional Neural Networks (CNN) solutions in single agent scenarios \cite{Mousavi2017,Liang2018}. Multi-agent DRL work is currently limited to solutions for homogeneous multi-agent by taking advantage of the similarity in order to train only one neural network which can be used for all agents indistinctly.\cite{VanDerPol2016} used transfer learning to transfer the learnt actions across the agents, while in \cite{Liu2017CooperativeDR} only one agent is trained at each training episode, and the others react based on their previously learned policies. However, in the cases where junctions are heterogenous, the knowledge is not directly reusable, and agents need to be trained separately to account for the potential impact of other agents' actions on its own environment. In the section we introduce the details of our approach addressing these issues. 
 
 %Prior to RDL, several RL approaches for heterogenous multi-agent UTC environments were done as in \cite{Dusparic2016,Chu2017,Tahifa2015,El-Tantawy2012}. However, the techniques used cannot be extended to DRL. Recent works started to explore DRL solutions for UTC in single agent scenarios to deal with the curse of dimensionality as in \cite{Li2016,Mousavi2017,Gao2017,Liang2018}. These studies started to represent the state as snapshots of the intersection in order to use Convolutional Neural Networks. The variables obtained from the images are position and speed of vehicles, however those are processed and expressed differently on each study.
 
 %The DNNs architecture are getting more complex over the years. First approaches only considered a simple CNN, but later on the new techniques were aggregated to improve the stability and performance of the training such as DDQN, Dueling Networks and Prioritized Experience Replay. All these single agent approaches obtained good results. Because of that, they were extended to multi-agent scenarios as in \cite{Belletti2018,VanDerPol2016,Liu2017CooperativeDR}. \cite{Belletti2018} used DRL for controlling the metering of highway on-ramps modelling the problem as discretized non-linear partial differential equations in a robust and non-parametric manner. \cite{VanDerPol2016,Liu2017CooperativeDR} implemented solutions for homogeneous multi-agent by taking advantage of the similarity in order to train only one Neural Network which can be used for all agents indistinctly. \cite{VanDerPol2016} used transfer planning and max-plus algorithm. While, \cite{Liu2017CooperativeDR} used a IQL variation where only one agent is trained at each training episode, and the others react based on their previously learned policies. After an amount of iterations, the latest agent's policy is distributed to the other agents, and the training agent is changed to another one to start a new training cycle. 
-
-\section{Design}
 
 \subsection{State Representation}\label{sec:stateRep}
 
@@ -215,13 +218,9 @@ r_{t} = \begin{cases}
 
 The neural network is the same used in \cite{Wang2016}. The Figure \ref{fig:CNN} illustrates the Deep Neural Network. Every agent has its own Neural Network copy in order to allow it to learn its own local policy since every agent is trained independently by using IDQN.
 
-\subsection{Framework}
-
-We use OpenAI's baseline framework \cite{baselines} to implement our Dueling Prioritized DDQN. OpenAI Baselines is a set of high-quality implementations of reinforcement learning algorithms in Python which uses the library TensorFlow \cite{Abadi2016}. 
-
 \section{Evaluation}
 
-In this section we present an evaluation of IDQN as solution for multi-agent DRL for heterogeneous agents in traffic light control using the traffic simulator SUMO \cite{SUMO2012}. We run the test in the network layout show in Figure \ref{fig:simSetup}, which consists of three heterogeneous junctions. 
+In this section we present an evaluation of IDQN as solution for multi-agent DRL for heterogeneous agents in traffic light control using the traffic simulator SUMO \cite{SUMO2012}. We use OpenAI's baseline framework \cite{baselines} to implement our Dueling Prioritized DDQN. OpenAI Baselines is a set of implementations of RL in Python which uses TensorFlow library \cite{Abadi2016}. We run the test in the network layout show in Figure \ref{fig:simSetup}, which consists of three heterogeneous junctions. 
 
 \begin{figure}
 \begin{center}
