@@ -271,15 +271,16 @@ AWT = \frac{\sum^{t=1}_{N}{W_{t}}}{N}
 We evaluate the following techniques:
 
 \begin{itemize}
-\item \textbf{Fixed Time / Round Robin (FT)}. This is a predefined configuration for all the traffic lights where the duration and order of the phases is fixed and pre configured.
+\item \textbf{Fixed Time / Round Robin (FT)}. Baseline in which the order of phases is fixed and preconfigured.
 
-\item \textbf{IDQN without experience replay (ERM Disabled)}. It is a IDQN technique but the experience replay is disabled, therefore the agent cannot store experiences.
+\item \textbf{IDQN without experience replay (PEMR Disabled)}, therefore the agent cannot store experiences.
 
-\item \textbf{IDQN with prioritized experience replay (PERM)}. It is a normal IDQN technique which uses the experience replay as recommended for DQN.
+\item \textbf{IDQN with prioritized experience replay (PEMR)}. 
 
-\item \textbf{IDQN with prioritized experience replay and fingerprint (PERM + FP)}. This is the proposed IDQN technique with the fingerprint to disambiguate the age of experience replays.
+\item \textbf{IDQN with prioritized experience replay and fingerprint (PEMR + FP)}. This is the proposed IDQN technique with the fingerprint to disambiguate the age of experience replays.
 
-\item \textbf{IDQN with standard experience replay (ERM)}. This is IDQN with the standard experience replay, not with prioritized experience replay.
+\item \textbf{IDQN with standard experience replay (EMR)}.
+%TODO: why did we do standard vs prioritized and whats the difference?
 \end{itemize}
 
 Every technique is tested in the following scenarios:
@@ -288,7 +289,7 @@ Every technique is tested in the following scenarios:
 \item \textbf{Low traffic load}. A scenario where the number of vehicles is reduced. It represents a normal flow where is not peek time. However, it is a good amount of cars to produce traffic jams if the traffic control is not good.
 \item \textbf{High traffic load}. A scenario where the number of vehicles is overwhelming. It represents the traffic load in peek times. This scenario certainly will produced long queues and traffic jams even with good control. The idea is to verify if it is possible and how much can be reduced in such a overcrowded scenario.
 \end{itemize}
-
+%TODO: need to put in exact figures
 \subsection{Experiments}
 
 The Figure \ref{fig:LowHighIDQNExp} presents the results of the experiments executed in low and high traffic load respectively.
