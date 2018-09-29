@@ -22,7 +22,7 @@
 
 \begin{abstract}
 
-Reinforcement Learning (RL) has been extensively used in urban traffic control (UTC) optimization due its capability to learn the dynamic of complex problems from interactions with the environment. Recent advances in Deep Reinforcement Learning (DRL) have opened up the possibilities for extending this work to more complex situations due to it overcoming the curse of dimensionality resulting from the exponential growth of the state and action spaces when incorporating fine-grained information. DRL has been shown to work very well for UTC on a single intersection, however, due to large training times, multi-junction implementations have been limited to training a single agent and replicating behaviour to other junctions, assuming homogeneity of all agents. 
+Reinforcement Learning (RL) has been extensively used in urban traffic control (UTC) optimization due its capability to learn the dynamics of complex problems from interactions with the environment. Recent advances in Deep Reinforcement Learning (DRL) have opened up the possibilities for extending this work to more complex situations due to it overcoming the curse of dimensionality resulting from the exponential growth of the state and action spaces when incorporating fine-grained information. DRL has been shown to work very well for UTC on a single intersection, however, due to large training times, multi-junction implementations have been limited to training a single agent and replicating behaviour to other junctions, assuming homogeneity of all agents. 
 
 This study proposes the usage of Independent Deep Q-Network (IDQN) to train multiple heterogeneous agents, which is a more realistic scenario given heterogeneity of junction layouts in the city. We use Dueling Deep Q-Networks (DDQNs) using prioritized experience replay to train each individual agent separately for its own conditions. We enrich this approach with fingerprinting to disambiguate the age of the data sampled from the replay memory to mitigate non-stationarity effects resulting from other agents affecting the environment. 
 
@@ -35,20 +35,17 @@ Our IDQN approach is evaluated on three connected heterogeneous junctions in low
 
 \section{Introduction}
 
+Traffic congestion is often caused by an inefficient control of traffic lights on intersections, i.e., settings not sufficiently adapted to particular set of conditions. In recent years several AI-based approaches have been investigated in order to optimize traffic flow in junctions. The most promising technique has been Reinforcement Learning (RL) due to its capacity to learn the dynamics of complex problems without any human intervention. Different RL implementations have been applied in urban traffic control (UTC), both on single junctions/agents as well as on multiple junctions/agents collaborating. The main issue with RL approaches is the curse of dimensionality that arises from the exponential growth of the state and action spaces because of the number of intersections.
+Combining RL with Neural Networks led to a method called Deep Reinforcement Learning (DRL) which enhances hugely the performance of RL for large scale problems. DRL techniques have demonstrated to work very well for traffic lights in single agent environments. Nonetheless, when the problem scales up to multiple intersections the need for coordination becomes more complex, and as a result, the latest studies take advantage of the similarity of agents in order to train several agents at the same time. However, assuming homogeneous junctions is not realistic as a city has a large range of different layouts of intersections.
 
-This research addresses heterogeneous multi-agents for  urban traffic control (UTC) systems as the first study applying Deep Reinforcement Learning (DRL) in a heterogeneous network layout which is a reflection of the cities in the real world. 
-%todo:change to traffic intro
-% repeat from intro extnesively used
-% issue limited size of state-action space limiting discretiziation of environment
-% drl acancesv enabled more finegraded, ie image from cameras, and instead of limiting to tabulerq-learning, large state space using neural networks rather than tabluer representations
-% verified in utc, but no heterogenous
-% issues in multi junction also not just training rimes but hgh dependencies between junctions, as actions of one influence traffic ocnditions on upstrean/dowmstream conditions
+This paper proposes a solution for heterogeneous multi-junction UTC scenario. Our approach is based on the  Independent Deep Q-Network (IDQN) to achieve learning on multiple agents, with each agent using Dueling Deep Q-Network (DDQN) enriched with fingerprinting to mitigate non-stationarity present in multi-agent environment. We evaluate the approach in widely used open source traffic simulator SUMO, and show it can successfully optimize the traffic flows on three heterogeneous junctions. 
+
 % in this paper we use dqn for single junction, idqn, a drl variant of independent q-learning to address multiple heterongeout junctions. to remove effects or non staionarytiy we use fignerptinting (check what it does)
 %the rest of this paper is organized as follows
 
-We evaluate the usage of IQL with Deep Q-Networks in a multi-agent setting by using a simulation of an urban traffic control system.
 
-The rest of this paper is organized as follows: Section 2 reviews other work in DRL in UTC. Chapter 3 presents the techniques our approach is absed on as well as the design specifics of our proposed IDQN techniques. Chapter 4 presents the simulation environment, experiment design, results and their analysis, while Section 5 concludes the paper discussing avenues for future work. 
+
+The rest of this paper is organized as follows: Section 2 reviews other work in DRL in UTC. Chapter 3 presents the techniques our approach is based on as well as the design specifics of our proposed IDQN techniques. Chapter 4 presents the simulation environment, experiment design, results and their analysis, while Section 5 concludes the paper discussing avenues for future work. 
 
 
 
@@ -202,11 +199,11 @@ A key component of DQN is the experience replay memory.  Unfortunately, the comb
 
 The action space varies depending of the structure of the intersection. For example, in a four road intersection the action space is defined as A = $\{$NS, EW, NST; EWT$\}$ where NS stands for turning green North-South roads, EW stands for turning green East-West roads, NST stands for turning green North-South right turning, and EWT stands for turning green East-West right turning.
 
-The duration of each phase is 1 time step. However, the agent implicitly determines how long each phase can last ranging from 1 time step up to the final time step of the simulation. The phase can be only changed by the agent when it decides to do it, therefore there is not a limit for how long a phase can take. Additional yellow phase is added during a fixed period of 3 time steps when the previous action is different than the current chosen action. This middle yellow phase reduces the risk of collisions.
+The duration of each phase is 1 time step, but at each time step the phase can be extended. Additional yellow phase is added during a fixed period of 3 time steps when the previous action is different than the current chosen action. This middle yellow phase reduces the risk of collisions.
 
 \subsection{Reward Function}
 
-Let $w_{i,t}$ be the i\textsuperscript{th} vehicle's waiting time at time step \textit{t}, and $W_{t}$ the total cumulative waiting time for all the vehicles in the observation scope of the road network at time step \textit{t} as shows in equation \ref{eq:totalWt}. The reward function is formulated in equation \ref{eq:rewfun}. The intention of the reward function is to reward positive the agent in a range (0.0, 1.0] where the agent's reward loses value proportional to the cumulative waiting time at time step \textit{t}. Thus, the agent must keep short waiting time in order to receive higher scores, and as consequence, this reward function accomplishes the goal of reducing the driver's waiting time at a junction.
+Let $w_{i,t}$ be the i\textsuperscript{th} vehicle's waiting time at time step \textit{t}, and $W_{t}$ the total cumulative waiting time for all the vehicles in the observation scope of the road network at time step \textit{t} as shows in equation \ref{eq:totalWt}. The reward function is formulated in equation \ref{eq:rewfun}. Agent receives a positive reward from a range (0.0, 1.0] where the agent's reward loses are proportional to the cumulative waiting time at time step \textit{t}. Thus, the agent must keep short waiting time in order to receive higher scores.
 
 \begin{equation} \label{eq:totalWt}
 W_{t} = \sum_{i}w_{i,t}
@@ -229,7 +226,7 @@ r_{t} = \begin{cases}
 \end{center}
 \end{figure}
 
-The neural network is the same used in \cite{Wang2016}. The Figure \ref{fig:CNN} illustrates the Deep Neural Network. Every agent has its own Neural Network copy in order to allow it to learn its own local policy since every agent is trained independently by using IDQN.
+The neural network is the same as used in \cite{Wang2016}. The Figure \ref{fig:CNN} illustrates the Deep Neural Network. Every agent has its own Neural Network copy in order to allow it to learn its own local policy since every agent is trained independently by using IDQN.
 
 \section{Evaluation} \label{evaluation}
 
@@ -237,7 +234,7 @@ In this section we present an evaluation of IDQN as solution for multi-agent DRL
 
 \subsection{Set up and parameters}
 
-We run the test in the network layout show in Figure \ref{fig:simSetup}, which consists of three heterogeneous junctions. 
+We run the test in the network layout shown in Figure \ref{fig:simSetup}, which consists of three heterogeneous junctions. 
 
 \begin{figure}
 \begin{center}
@@ -279,10 +276,7 @@ We select two metrics that have been used in several DRL studies for UTC. Every 
 \begin{itemize}
 	\item \textbf{Cumulative Reward}. The reward \textit{r$_{t}$} taken on every time step \textit{t} is accumulated until the episode is finished.
 	
-	\item \textbf{Average Waiting Time}. This is the sum of all \textit{W$_{t}$} divided by the number of time steps in the episode (N) as shown in Equation \ref{eq:AWT}. SUMO defines the waiting time for a vehicle as the time (in seconds) spent with a speed below 0.1 m/s since the last time it was faster than 0.1 m/s.
-\begin{equation}\label{eq:AWT}
-AWT = \frac{\sum^{t=1}_{N}{W_{t}}}{N}
-\end{equation}
+	\item \textbf{Average Waiting Time}. This is the sum of all \textit{W$_{t}$} divided by the number of time steps in the episode.  SUMO defines the waiting time for a vehicle as the time (in seconds) spent with a speed below 0.1 m/s since the last time it was faster than 0.1 m/s.
 \end{itemize}
 
 We implement and evaluate the following combinations of IDQN, experience replay, and fingerprinting, to assess impact of each component on the performance :
@@ -301,7 +295,7 @@ Every technique is tested in the following traffic conditions:
 
 \begin{itemize}
 \item \textbf{Low traffic load}. 1300 to 1600 cars are simulated per 3600 time steps. With efficient traffic control the scenario is expected to result in smooth traffic flow, but any control inefficiencies will result in longer queues. 
-\item \textbf{High traffic load}. 1900 to 2500 cars are simulated per 3600 time steps.  This scenario represents the traffic load in peek times. It is designed to produce long queues and traffic jams even with efficient control. The idea is to verify if it is possible and how much can be reduced in such a overcrowded scenario. 
+\item \textbf{High traffic load}. 1900 to 2500 cars are simulated per 3600 time steps.  This scenario represents the traffic load in peak times.  
 \end{itemize}
 
 
@@ -355,7 +349,7 @@ As illustrated in figure \ref{fig:HighIDQNREW}, in high traffic conditions, \tex
 
 The Figure \ref{fig:LowIDQNAWT} presents the waiting time for low traffic. \textit{FT} waiting time follows the same pattern as its rewards. \textit{PEMR Disabled} produces extremely high waiting times. Similarly to their performance with respect to rewards, \textit{PEMR} and \textit{PEMR + FP} get similar performance, with very low waiting times which are approximately 300$\%$ less than \textit{FT}. From these results we can confirm that the fingerprinting is not helping, as observed when analyzing the rewards. In high traffic load, the results for waiting time follow the same pattern as for the rewards in high load: \textit{PEMR + FP} slightly outperforms \textit{PEMR}. Overall, no DRL approach learns a good performance for high load in the amount of time given for the training.
 
-To further analyse the results, we have looked into unexpectedly bad performance of fingerprinting. One possibility is that the fingerprint might not be able to further improve the performance as prioritized experience replay is already good enough to deal with the non-stationarity without adding fingerprints. To test this hypothesis, we run an experiment using only \textbf{normal experience replay (EMR)}. The figure \ref{fig:ERMIDQNExp} shows this additional experiment which compares \textit{EMR} against \textit{PEMR + FP}. As shown in Figure \ref{fig:ERMIDQNREW}, both techniques learn well, but \textit{PEMR + FP} obtains higher rewards outperforming \textit{ERM} in around 45$\%$ in the highest point of \textit{PEMR + FP}. Figure \ref{fig:ERMIDQNAWT} illustrates how they get a similar performance in waiting time, but \textit{EMR} is  more stable than \textit{PEMR + FP} by not producing peeks. Regardless of the waiting time, we conclude the Prioritized Experience Replay helps to deal with the non-stationarity by getting bigger rewards, which indicates that \textit{PEMR} has better performance than \textit{EMR}. The waiting time results are a direct result of the reward function, and \textit{PEMR} is getting better results. It could be a correlation problem of the reward function if the waiting time is not decreasing proportionally to the rewards. These results prove that \textit{PEMR} can be good enough to deal with the non-stationarity. Potentially \textit{PEMR + FP} could be improved by selecting a better fingerprint, but we leave further investigation into this for future work.
+To further analyse the results, we have looked into unexpectedly bad performance of fingerprinting. One possibility is that the fingerprint might not be able to further improve the performance as prioritized experience replay is already good enough to deal with the non-stationarity without adding fingerprints. To test this hypothesis, we run an experiment using only \textbf{normal experience replay (EMR)}. The figure \ref{fig:ERMIDQNExp} shows this additional experiment which compares \textit{EMR} against \textit{PEMR + FP}. Both techniques learn well, but \textit{PEMR + FP} obtains higher rewards outperforming \textit{ERM} by around 45$\%$ in the highest point of \textit{PEMR + FP}. Figure \ref{fig:ERMIDQNAWT} illustrates how they get a similar performance in waiting time, but \textit{EMR} is more stable than \textit{PEMR + FP} by not producing peeks. We conclude the Prioritized Experience Replay helps to deal with the non-stationarity by getting bigger rewards, which indicates that \textit{PEMR} has better performance than \textit{EMR}. These results prove that \textit{PEMR} can be good enough to deal with the non-stationarity. Potentially \textit{PEMR + FP} could be improved by selecting a better fingerprint, but we leave further investigation into this for future work.
 
 \begin{figure}[!htbp]
     \centering
@@ -375,7 +369,7 @@ To further analyse the results, we have looked into unexpectedly bad performance
 
 \section{Conclusion and future work} \label{conclusion}
 
-This paper presented IDQN as the first approach in literature to addresses heterogeneous multi-agent DRL in UTC. We implemented a IDQN by implementing each agent using a Dueling Prioritized DDQN. We evaluated IDQN's performance with different configurations. We executed tests in two traffic conditions, low and high traffic loads. Our experiments showed the IDQN is a suitable techniques for heterogeneous multi-agent UTC environments which can deal with the non-stationarity. The best results were obtained in the low traffic load. The high traffic load requires further investigation, by either fine-tuning hyperparamters to high load or allowing for the longer training time. We demonstrated that IDQN outperforms the baseline, and that the experience replay is mandatory to learn efficiently. Nonetheless, the fingerprint we chose do not enhance the normal prioritized experience replay. Therefore, further investigation is needed to evaluate if different fingerprints could improve the performance. The integration of the fingerprint as an additional matrix can be studied to verify if it is the best approach in a RL system fed with image-like states. Finally, our technique should be evaluated against standard RL approaches, to investigate if more fine-grained sensor data use enabled by the use of DRL approaches improves the performance over standard approaches and how do DRL training times compare to traditional RL approaches in UTC scenarios. 
+This paper presented IDQN as the first approach in literature to addresses heterogeneous multi-agent DRL in UTC. We evaluated IDQN's performance with different configurations in low and high traffic loads. Our experiments showed the IDQN is a suitable techniques for heterogeneous multi-agent UTC environments which can deal with the non-stationarity. The best results were obtained in the low traffic load. The high traffic load requires further investigation, by either fine-tuning hyperparamters to high load or allowing for the longer training time. We demonstrated that the experience replay is mandatory to learn efficiently, but that the fingerprint we chose did not enhance the normal prioritized experience replay. Therefore, further investigation is needed to evaluate if different fingerprints could improve the performance. Further, our technique should be evaluated against standard RL approaches, to investigate if more fine-grained sensor data use enabled by the use of DRL approaches improves the performance over standard approaches.
 
 
 % --- BIBLIOGRAPHY
