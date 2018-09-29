@@ -37,7 +37,18 @@ Our IDQN approach is evaluated on three connected heterogeneous junctions in low
 \section{Introduction}
 
 %todo: change to traffic intro
-This research addresses heterogeneous multi-agents for  urban traffic control (UTC) systems as the first study applying Deep Reinforcement Leaning (DRL) in a heterogeneous network layout which is a reflection of the cities in the real world. It proposes the usage of DRL to deal with the curse of dimensionality that suffers RL approaches by using Neural Networks. It also uses Indepedent Q-Learning (IQL), where each agent learns independently and simultaneously its own policy, treating other agents as part of the environment. However, the environment becomes nonstationary from the point of view of each agent, as it involves the interaction with other agents who are themselves learning at the same time, ruling out any convergence guarantees. The technique used for this problem is Deep Q-Networks which relies in a component so called experience replay memory in order to stabilize and improve the learning. However, this memory is incompatible with non-stationary environments. In order to combine the experience replay memory and IQL, we used a technique of fingerprinting which stabilizes the memory against the non-stationarity. This fingerprint disambiguates the age of the data sampled from the replay memory. We evaluate the usage of IQL with Deep Q-Networks in a multi-agent setting by using a simulation of an urban traffic control system.
+This research addresses heterogeneous multi-agents for  urban traffic control (UTC) systems as the first study applying Deep Reinforcement Leaning (DRL) in a heterogeneous network layout which is a reflection of the cities in the real world. 
+%todo:
+% repeat from intro extnesively used
+% issue limited size of state-action space limiting discretiziation of environment
+% drl acancesv enabled more finegraded, ie image from cameras, and instead of limiting to tabulerq-learning, large state space using neural networks rather than tabluer representations
+% verified in utc, but no heterogenous
+% issues in multi junction also not just training rimes but hgh dependencies between junctions, as actions of one influence traffic ocnditions on upstrean/dowmstream conditions
+% in this paper we use dqn for single junction, idqn, a drl variant of independent q-learning to address multiple heterongeout junctions. to remove effects or non staionarytiy we use fignerptinting (check what it does)
+%the rest of this paper is organized as follows
+
+
+We evaluate the usage of IQL with Deep Q-Networks in a multi-agent setting by using a simulation of an urban traffic control system.
 
 
 \section{Related Work}
@@ -45,8 +56,10 @@ This research addresses heterogeneous multi-agents for  urban traffic control (U
 RL has been extensively applied in UTC, with some of the most advanced approaches addressing multi-agent multi-objective heterogenous scenarios \cite{Dusparic2016, El-Tantawy2012}. To enable using image snapshosts of the intersection as input, while dealing with the curse of dimensionality, more recent work started exploring DRL and Convolutional Neural Networks (CNN) solutions in single agent scenarios \cite{Mousavi2017,Liang2018}. Multi-agent DRL work is currently limited to solutions for homogeneous multi-agent by taking advantage of the similarity in order to train only one neural network which can be used for all agents indistinctly.\cite{VanDerPol2016} used transfer learning to transfer the learnt actions across the agents, while in \cite{Liu2017CooperativeDR} only one agent is trained at each training episode, and the others react based on their previously learned policies. However, in the cases where junctions are heterogenous, the knowledge is not directly reusable, and agents need to be trained separately to account for the potential impact of other agents' actions on its own environment. In the section we introduce the details of our approach addressing these issues. 
 
 \section{Design}
-%TODO: give some sort of an intro of what this section does and why - copy from intro the issues and summary of whats addressing what, and then say we describe each of these here, before going into specifics of our design
-%\subsection{Background and the techniques used}
+
+This paper proposes the usage of DRL to deal with the curse of dimensionality, that traditional RL approaches encounter , by using Neural Networks. It train multiple heterogenous agents, it  uses Indepedent Q-Learning (IQL), where each agent learns independently and simultaneously its own policy, treating other agents as part of the environment. However, the environment becomes nonstationary from the point of view of each agent, as it involves the interaction with other agents who are themselves learning at the same time, ruling out any convergence guarantees. The technique used for this problem is Deep Q-Networks which relies in a component so called experience replay memory in order to stabilize and improve the learning. However, this memory is incompatible with non-stationary environments. In order to combine the experience replay memory and IQL, we used a technique of fingerprinting which stabilizes the memory against the non-stationarity. This fingerprint disambiguates the age of the data sampled from the replay memory
+
+In this section we describe all the techniques underlying our approach, as well as present specific ways in which these are combined in our approach. We detail out specifics of all RL components in our implementation, namely the design of the state space, action space, and reward function, and deep neural network architecture. 
 
 \subsection{Deep Reinforcement Learning}
 
