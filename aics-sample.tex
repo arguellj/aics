@@ -21,7 +21,6 @@
 \maketitle
 
 \begin{abstract}
-%todo: shorten
 
 Reinforcement Learning (RL) has been extensively used in urban traffic control (UTC) optimization due its capability to learn the dynamic of complex problems from interactions with the environment. Recent advances in Deep Reinforcement Learning (DRL) have opened up the possibilities for extending this work to more complex situations due to it overcoming the curse of dimensionality resulting from the exponential growth of the state and action spaces when incorporating fine-grained information. DRL has been shown to work very well for UTC on a single intersection, however, due to large training times, multi-junction implementations have been limited to training a single agent and replicating behaviour to other junctions, assuming homogeneity of all agents. 
 
@@ -37,7 +36,7 @@ Our IDQN approach is evaluated on three connected heterogeneous junctions in low
 \section{Introduction}
 
 %todo: change to traffic intro
-This research addresses heterogeneous multi-agents for  urban traffic control (UTC) systems as the first study applying Deep Reinforcement Leaning (DRL) in a heterogeneous network layout which is a reflection of the cities in the real world. 
+This research addresses heterogeneous multi-agents for  urban traffic control (UTC) systems as the first study applying Deep Reinforcement Learning (DRL) in a heterogeneous network layout which is a reflection of the cities in the real world. 
 %todo:
 % repeat from intro extnesively used
 % issue limited size of state-action space limiting discretiziation of environment
@@ -123,26 +122,21 @@ Dueling Network is a technique proposed by \cite{Wang2016} which computes separa
 Q(s,a;\theta,\alpha,\beta) = V(s;\theta,\beta) + \left( A\left(s,a;\theta,\alpha \right) - \frac{1}{|\mathcal{A}|} \displaystyle\sum_{a'} A\left(s,a;\theta,\alpha \right) \right) 
 \end{equation}
 	
-\subsection{Multi-Agent Reinforcement Learning} \label{sec:MARL}
+%\subsection{Multi-Agent Reinforcement Learning} \label{sec:MARL}
 
 %TODO: why are we explaining this?
 
-Consider a cooperative multi-agent environment where \textit{n} agents identified by a $\epsilon$ A $\equiv$ $\{$1,..., n$\}$ participate in a stochastic game G, denoted by a tuple $<$S, U, P, r, Z, O, n, $\gamma>$. The environment consists of states s$_{t}$ $\epsilon$ S, where at every time step t, each agent takes an action \textit{u$^{a}_{t}$} $\epsilon$ U, forming a joint action \textbf{u$_{t}$} $\epsilon$ \textbf{U} $\equiv$ U$^{n}$.
-The transition probabilities are defined by P(s$_{t+1}$ $|$ s$_{t}$, u$_{t}$) : S x U x S $\rightarrow$ [0, 1]. A global reward function r(s$_{t}$, u$_{t}$) : S x U $\rightarrow$ $\mathbb{R}$ is shared between all the agents.
+%Consider a cooperative multi-agent environment where \textit{n} agents identified by a $\epsilon$ A $\equiv$ $\{$1,..., n$\}$ participate in a stochastic game G, denoted by a tuple $<$S, U, P, r, Z, O, n, $\gamma>$. The environment consists of states s$_{t}$ $\epsilon$ S, where at every time step t, each agent takes an action \textit{u$^{a}_{t}$} $\epsilon$ U, forming a joint action \textbf{u$_{t}$} $\epsilon$ \textbf{U} $\equiv$ U$^{n}$.
+%The transition probabilities are defined by P(s$_{t+1}$ $|$ s$_{t}$, u$_{t}$) : S x U x S $\rightarrow$ [0, 1]. A global reward function r(s$_{t}$, u$_{t}$) : S x U $\rightarrow$ $\mathbb{R}$ is shared between all the agents.
 
-Each agent's observations z $\epsilon$ Z follows an observation function O(s$_{t}$, a) : S x A $\rightarrow$ Z. Each agent \textit{a} conditions its behaviour on its own action-observation history $\tau_{a}$ $\epsilon$ T $\equiv$ (Z x U)*, according to its policy $\pi_{a}$(u$_{a}$ $|$ $\tau_{a}$) : T x U $\rightarrow$ [0, 1]. After each transition, the action u$_{t}^{a}$ and new observation O(s$_{t}$, a) are added to $\tau_{a}$, forming $\tau_{a}^{'}$. Let the joint quantities over agents be in bold, and the joint quantities over agents other than \textit{a} with the subscript \textit{-a}, so that, e.g., \emph{u} = [u$_{t}^{t}$, \textbf{u}$_{-a}$].
+%Each agent's observations z $\epsilon$ Z follows an observation function O(s$_{t}$, a) : S x A $\rightarrow$ Z. Each agent \textit{a} conditions its behaviour on its own action-observation history $\tau_{a}$ $\epsilon$ T $\equiv$ (Z x U)*, according to its policy $\pi_{a}$(u$_{a}$ $|$ $\tau_{a}$) : T x U $\rightarrow$ [0, 1]. After each transition, the action u$_{t}^{a}$ and new observation O(s$_{t}$, a) are added to $\tau_{a}$, forming $\tau_{a}^{'}$. Let the joint quantities over agents be in bold, and the joint quantities over agents other than \textit{a} with the subscript \textit{-a}, so that, e.g., \emph{u} = [u$_{t}^{t}$, \textbf{u}$_{-a}$].
 
-\paragraph{\textbf{Independent DQN}}
-
-Independent DQN (IDQN) is an extension of Independent Q-Learning (IQL)\cite{Tan1993} with DQN for cooperative multi-agent environment, where each agent \textit{a} observes the partial state s$_{t}^{a}$, selects an individual action \textit{u$_{t}^{a}$}, and receives a team reward, r$_{t}$ shared among all agents. \cite{Tampuu2015} combines DQN with independent Q-learning, where each agent \textit{a} independently and simultaneously learns its own Q-function \textit{Q$^{a}(s, u^{a};\theta^{a}_{i})$} \cite{DBLP:journals/corr/FoersterAFW16a}. Since our setting is partially observable, IDQN can be implemented by having each agent conditioned on its action-observation history, i.e., Q$_{a}$($\tau_{a}$, u$_{a}$). In DRL, this can be implemented by given to each agent a DQN on its own observations and actions.
+\paragraph{\textbf{Multi-agent learning: Independent DQN}}
+In a multi-agent setting, multiple agents can collaborate directly by exchanging Q-values or jointly deciding on actions, or can operate independently in the shared environment, such as in the case of Independent Q-Learning (IQL)\cite{Tan1993}. Independent DQN (IDQN) is an extension of IQL for DRL environments using DQN, where each agent \textit{a} observes the partial state s$_{t}^{a}$, selects an individual action \textit{u$_{t}^{a}$}, and receives a team reward, r$_{t}$ shared among all agents. \cite{Tampuu2015} combines DQN with independent Q-learning, where each agent \textit{a} independently and simultaneously learns its own Q-function \textit{Q$^{a}(s, u^{a};\theta^{a}_{i})$} \cite{DBLP:journals/corr/FoersterAFW16a}. Since our setting is partially observable, IDQN can be implemented by having each agent conditioned on its action-observation history, i.e., Q$_{a}$($\tau_{a}$, u$_{a}$). In DRL, this can be implemented by given to each agent a DQN on its own observations and actions.
 
 \paragraph{\textbf{Fingerprinting in IQL}}
 
-As mentioned before, a key component of DQN is the experience replay memory.  Unfortunately, the combination of experience replay with IQL appears to be problematic because the non-stationarity introduced by IQL which provokes that the dynamics that generated the data in the agent's experience replay memory no longer indicate the current dynamics in which the agent is learning.
-
-A fingerprint technique was introduced in \cite{Foerster2017}, which states that the disadvantage of IQL is that it ignores the changing over time of the other agents' policies because it perceives the other agents as part of the environment, which causes non-stationarity on its own Q-function. Hence, the Q-function might be made stationary if it conditioned on the other agents' policies.
-
-Based on the results of the study, a fingerprint must be correlated with the true value of state-action pairs given the other agents' policies. It should gradually change over training time in order to allow the model to generalise across experiences in which the other agents execute policies as they learn.
+A key component of DQN is the experience replay memory.  Unfortunately, the combination of experience replay with IQL is problematic because the non-stationarity introduced by IQL results in data in experience replay memory no longer indicating the current dynamics in which the agent is learning. To address this issue, \cite{Foerster2017} introduced a fingerprint technique, which associates the data in replay memory with the age of the data, i.e., where in training trajectory does it originate from. It gradually changes over training time in order to allow the model to generalise across experiences in which the other agents execute policies as they learn.
 
 
 
