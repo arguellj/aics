@@ -21,6 +21,7 @@
 \maketitle
 
 \begin{abstract}
+%todo: shorten
 
 Reinforcement Learning (RL) has been extensively used in urban traffic control (UTC) optimization due its capability to learn the dynamic of complex problems from interactions with the environment. Recent advances in Deep Reinforcement Learning (DRL) have opened up the possibilities for extending this work to more complex situations due to it overcoming the curse of dimensionality resulting from the exponential growth of the state and action spaces when incorporating fine-grained information. DRL has been shown to work very well for UTC on a single intersection. Nonetheless, when the problem is expanded to multiple intersections, the need for coordination becomes too complex and DRL training time too large, and as a result, DRL approaches rely on the similarity of junctions to train the agents controlling them as one. However, assuming homogeneity of junctions is not realistic, as a city has a wide range of different layouts of intersections.
 
@@ -35,6 +36,7 @@ The approach is evaluated on three connected junctions with different layouts in
 
 \section{Introduction}
 
+%todo: change to traffic intro
 This research addresses heterogeneous multi-agents for  urban traffic control (UTC) systems as the first study applying Deep Reinforcement Leaning (DRL) in a heterogeneous network layout which is a reflection of the cities in the real world. It proposes the usage of DRL to deal with the curse of dimensionality that suffers RL approaches by using Neural Networks. It also uses Indepedent Q-Learning (IQL), where each agent learns independently and simultaneously its own policy, treating other agents as part of the environment. However, the environment becomes nonstationary from the point of view of each agent, as it involves the interaction with other agents who are themselves learning at the same time, ruling out any convergence guarantees. The technique used for this problem is Deep Q-Networks which relies in a component so called experience replay memory in order to stabilize and improve the learning. However, this memory is incompatible with non-stationary environments. In order to combine the experience replay memory and IQL, we used a technique of fingerprinting which stabilizes the memory against the non-stationarity. This fingerprint disambiguates the age of the data sampled from the replay memory. We evaluate the usage of IQL with Deep Q-Networks in a multi-agent setting by using a simulation of an urban traffic control system.
 
 
@@ -43,7 +45,7 @@ This research addresses heterogeneous multi-agents for  urban traffic control (U
 RL has been extensively applied in UTC, with some of the most advanced approaches addressing multi-agent multi-objective heterogenous scenarios \cite{Dusparic2016, El-Tantawy2012}. To enable using image snapshosts of the intersection as input, while dealing with the curse of dimensionality, more recent work started exploring DRL and Convolutional Neural Networks (CNN) solutions in single agent scenarios \cite{Mousavi2017,Liang2018}. Multi-agent DRL work is currently limited to solutions for homogeneous multi-agent by taking advantage of the similarity in order to train only one neural network which can be used for all agents indistinctly.\cite{VanDerPol2016} used transfer learning to transfer the learnt actions across the agents, while in \cite{Liu2017CooperativeDR} only one agent is trained at each training episode, and the others react based on their previously learned policies. However, in the cases where junctions are heterogenous, the knowledge is not directly reusable, and agents need to be trained separately to account for the potential impact of other agents' actions on its own environment. In the section we introduce the details of our approach addressing these issues. 
 
 \section{Design}
-%TODO: give some sort of an intro of what this section does and why
+%TODO: give some sort of an intro of what this section does and why - copy from intro the issues and summary of whats addressing what, and then say we describe each of these here, before going into specifics of our design
 %\subsection{Background and the techniques used}
 
 \subsection{Deep Reinforcement Learning}
@@ -269,6 +271,7 @@ AWT = \frac{\sum^{t=1}_{N}{W_{t}}}{N}
 \end{itemize}
 
 We evaluate the following techniques:
+%todo: why do we evaluate these?
 
 \begin{itemize}
 \item \textbf{Fixed Time / Round Robin (FT)}. Baseline in which the order of phases is fixed and preconfigured.
@@ -341,7 +344,7 @@ As illustrated in figure \ref{fig:HighIDQNREW}, \textit{FT} seems to make a good
 The Figure \ref{fig:LowIDQNAWT} presents the waiting time for low traffic. \textit{FT} gets the same  behaviour than the rewards. In the case of \textit{PEMR Disabled}, it  produces extremely high waiting times. Alike in rewards, \textit{PEMR} and \textit{PEMR + FP} get similar performance, with very low waiting times which are approximately 300$\%$ less than \textit{FT}. From these results we can also conclude that the fingerprinting is not helping. In high traffic load, the the results are similar. \textit{PEMR + FP} outperform slightly \textit{PEMR}. Alike the rewarding results, there is not learning across the training.
 
 The unexpected performance of the fingerprint can be caused by:  
-
+%todo: remove the first hypothesis since not tested. or downloplayd it
 \begin{itemize}
 \item \textbf{Not proper selection of fingerprint.} Fingerprint do not correlate enough with the true value of state-action pairs given the other agents' policies and/or it does not vary smoothly over training, which does not allow the model to generalise across experiences in which the other agents execute policies as they learn.
 \item \textbf{Prioritized experience replay is good enough to deal with the non-stationarity.} Due to importance weights that allow to know what records are more valuable samples, which helps to disambiguate the age of the data.
@@ -364,11 +367,14 @@ We only verify the second hypothesis by executing a test with \textit{EMR}. The 
     \caption{Low Traffic IDQN Experiments with Standard ERM}\label{fig:ERMIDQNExp}
 \end{figure}
 
+%todo: need summary of evaluation! 
+
 \section{Conclusion}
 
 This paper presented IDQN as the only study which addresses heterogeneous multi-agent DRL in UTC. We implemented a IDQN by giving a Dueling Prioritized DDQN to each agent. We evaluated IDQN's performance with different configurations. We executed tests in two traffic conditions, i.e low and high traffic loads. Our experiments showed the IDQN is a suitable techniques for heterogeneous multi-agent UTC environments which can deal with the non-stationarity. The best results were obtained in the low traffic load. The high traffic load seems to need longer training time. We demonstrated that IDQN outperforms the baseline, and that the experience replay is mandatory to learn efficiently. Nonetheless, the fingerprint we chose do not enhance the normal prioritized experience replay.
 
 Finally, PEMR needs further investigation to find out better fingerprints. Also, the integration of the fingerprint as an additional matrix can be studied to verify if it is the best approach in a RL system fed with image-like states.
+%todo: need to compare to just plain RL using different sensor data, any benefit from using drl over rl, shown it can be used, but still needs to be ivnestigated whether it should/waht are the benefits over it, ie in which siutations does it make sense to use one or the other. 
 
 % --- BIBLIOGRAPHY
 \bibliographystyle{splncs03}
