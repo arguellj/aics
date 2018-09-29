@@ -11,7 +11,7 @@ Abadi~et al, G.B.: {TensorFlow: A System for Large-Scale Machine Learning
 \bibitem{baselines}
 Dhariwal, P., Hesse, C., Klimov, O., Nichol, A., Plappert, M., Radford, A.,
   Schulman, J., Sidor, S., Wu, Y.: {OpenAI Baselines}.
-  $\backslash$url{\{}https://github.com/openai/baselines{\}} (2017)
+  https://github.com/openai/baselines (2017)
 
 \bibitem{Dusparic2016}
 Dusparic, I., Cahill, V.: {Autonomic multi-policy optimization in pervasive
@@ -25,13 +25,7 @@ Foerster, J.N., Assael, Y.M., de~Freitas, N., Whiteson, S.: {Learning to
 \bibitem{Foerster2017}
 Foerster, J.N., Nardelli, N., Farquhar, G., Torr, P.H.S., Kohli, P., Whiteson,
   S.: {Stabilising Experience Replay for Deep Multi-Agent Reinforcement
-  Learning}. CoRR  abs/1702.0 (2017), \url{http://arxiv.org/abs/1702.08887}
-
-\bibitem{Gao2017}
-Gao, J., Shen, Y., Liu, J., Ito, M., Shiratori, N.: {Adaptive Traffic Signal
-  Control: Deep Reinforcement Learning Algorithm with Experience Replay and
-  Target Network}. arXiv pp. 1--10 (2017),
-  \url{https://arxiv.org/pdf/1705.02755.pdf{\%}0Ahttp://arxiv.org/abs/1705.02755}
+  Learning}. CoRR  abs/1702.0 (2017)
 
 \bibitem{Hasselt:2016:DRL:3016100.3016191}
 van Hasselt, H., Guez, A., Silver, D.: {Deep Reinforcement Learning with Double
@@ -46,7 +40,7 @@ Hasselt, H.V., Group, A.C., Wiskunde, C.: {Double Q-learning}. Nips pp. 1--9
 Krajzewicz, D., Erdmann, J., Behrisch, M., Bieker, L.: {Recent Development and
   Applications of {\{}SUMO - Simulation of Urban MObility{\}}}. International
   Journal On Advances in Systems and Measurements  5(3{\&}4),  128--138 (dec
-  2012), \url{http://elib.dlr.de/80483/}
+  2012)
 
 \bibitem{Liang2018}
 Liang, X., Du, X., Wang, G., Han, Z.: {Deep Reinforcement Learning for Traffic
@@ -96,8 +90,7 @@ Tan, M.: {Multi-Agent Reinforcement Learning: Independent vs. Cooperative
 
 \bibitem{Wang2016}
 Wang, Z., de~Freitas, N., Lanctot, M.: {Dueling Network Architectures for Deep
-  Reinforcement Learning}. arXiv (9),  1--16 (2016),
-  \url{http://arxiv.org/abs/1511.06581}
+  Reinforcement Learning}. arXiv (9),  1--16 (2016)
 
 \bibitem{Watkins1992}
 Watkins, C.J.C.H., Dayan, P.: {Q-learning}. Machine Learning  8(3-4) (1992)

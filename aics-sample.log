@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  27 SEP 2018 23:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  29 SEP 2018 22:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -446,139 +446,125 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 21.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-
-LaTeX Warning: Citation ` El-Tantawy2012' on page 2 undefined on input line 43.
-
-
-[2]
+{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ¦ in font cmr10!
- [3] [4] <images/intersection.png, id=30, 576.1525pt x 573.14125pt>
+ [4]
+<images/intersection.png, id=31, 576.1525pt x 573.14125pt>
 File: images/intersection.png Graphic file (type png)
 
 <use images/intersection.png>
-Package pdftex.def Info: images/intersection.png used on input line 145.
+Package pdftex.def Info: images/intersection.png used on input line 155.
 (pdftex.def)             Requested size: 86.78088pt x 86.32603pt.
 
-Overfull \hbox (39.70721pt too wide) in paragraph at lines 167--178
+Overfull \hbox (39.70721pt too wide) in paragraph at lines 177--188
 []$[]$ 
  []
 
 [5] [6 <./images/intersection.png>]
-<images/CNN.png, id=41, 769.87625pt x 349.305pt>
+<images/CNN.png, id=42, 769.87625pt x 349.305pt>
 File: images/CNN.png Graphic file (type png)
  <use images/CNN.png>
-Package pdftex.def Info: images/CNN.png used on input line 213.
+Package pdftex.def Info: images/CNN.png used on input line 223.
 (pdftex.def)             Requested size: 277.69987pt x 126.0002pt.
 
-<images/MARL_env.png, id=42, 607.77063pt x 589.70313pt>
+<images/MARL_env.png, id=43, 607.77063pt x 589.70313pt>
 File: images/MARL_env.png Graphic file (type png)
 
 <use images/MARL_env.png>
-Package pdftex.def Info: images/MARL_env.png used on input line 227.
+Package pdftex.def Info: images/MARL_env.png used on input line 241.
 (pdftex.def)             Requested size: 52.0664pt x 50.51552pt.
  [7 <./images/CNN.png>] [8 <./images/MARL_env.png>]
-<images/Low-Load-REW.png, id=54, 462.528pt x 346.896pt>
+<images/Low-Load-REW.png, id=55, 462.528pt x 346.896pt>
 File: images/Low-Load-REW.png Graphic file (type png)
 
 <use images/Low-Load-REW.png>
-Package pdftex.def Info: images/Low-Load-REW.png used on input line 300.
+Package pdftex.def Info: images/Low-Load-REW.png used on input line 309.
 (pdftex.def)             Requested size: 166.61781pt x 124.96185pt.
 
-<images/Low-Load-AWT.png, id=55, 462.528pt x 346.896pt>
+<images/Low-Load-AWT.png, id=56, 462.528pt x 346.896pt>
 File: images/Low-Load-AWT.png Graphic file (type png)
 
 <use images/Low-Load-AWT.png>
-Package pdftex.def Info: images/Low-Load-AWT.png used on input line 305.
+Package pdftex.def Info: images/Low-Load-AWT.png used on input line 314.
 (pdftex.def)             Requested size: 166.61781pt x 124.96185pt.
 
-<images/High-Load-REW.png, id=56, 462.528pt x 346.896pt>
+<images/High-Load-REW.png, id=57, 462.528pt x 346.896pt>
 File: images/High-Load-REW.png Graphic file (type png)
 
 <use images/High-Load-REW.png>
-Package pdftex.def Info: images/High-Load-REW.png used on input line 310.
+Package pdftex.def Info: images/High-Load-REW.png used on input line 319.
 (pdftex.def)             Requested size: 166.61781pt x 124.96185pt.
 
-<images/High-Load-AWT.png, id=57, 462.528pt x 346.896pt>
+<images/High-Load-AWT.png, id=58, 462.528pt x 346.896pt>
 File: images/High-Load-AWT.png Graphic file (type png)
 
 <use images/High-Load-AWT.png>
-Package pdftex.def Info: images/High-Load-AWT.png used on input line 315.
+Package pdftex.def Info: images/High-Load-AWT.png used on input line 324.
 (pdftex.def)             Requested size: 166.61781pt x 124.96185pt.
- [9 <./images/Low-Load-REW.png> <./images/Low-Load-AWT.png> <./images/High-Load
--REW.png> <./images/High-Load-AWT.png>]
-<images/ERM-Low-Load-REW.png, id=65, 462.528pt x 346.896pt>
+ [9] [10 <./images/Low-Load-REW.png> <./images/Low-Load-AWT.png> <./images/High
+-Load-REW.png> <./images/High-Load-AWT.png>]
+<images/ERM-Low-Load-REW.png, id=69, 462.528pt x 346.896pt>
 File: images/ERM-Low-Load-REW.png Graphic file (type png)
 
 <use images/ERM-Low-Load-REW.png>
-Package pdftex.def Info: images/ERM-Low-Load-REW.png used on input line 355.
+Package pdftex.def Info: images/ERM-Low-Load-REW.png used on input line 357.
 (pdftex.def)             Requested size: 166.61781pt x 124.96185pt.
 
-<images/ERM-Low-Load-AWT.png, id=66, 462.528pt x 346.896pt>
+<images/ERM-Low-Load-AWT.png, id=70, 462.528pt x 346.896pt>
 File: images/ERM-Low-Load-AWT.png Graphic file (type png)
 
 <use images/ERM-Low-Load-AWT.png>
-Package pdftex.def Info: images/ERM-Low-Load-AWT.png used on input line 360.
+Package pdftex.def Info: images/ERM-Low-Load-AWT.png used on input line 362.
 (pdftex.def)             Requested size: 166.61781pt x 124.96185pt.
- [10] (./aics-sample.bbl
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 14.
+ (./aics-sample.bbl [11 <./images/ERM-Low-Load-REW.png> <./images/ERM-Low-Load-
+AWT.png>]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 41.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 14.
-
-Underfull \hbox (badness 10000) in paragraph at lines 12--15
-[]\OT1/cmr/m/n/9 Dhariwal, P., Hesse, C., Klimov, O., Nichol, A., Plap-pert, M.
-,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 12--15
-\OT1/cmr/m/n/9 Rad-ford, A., Schul-man, J., Sidor, S., Wu, Y.: Ope-nAI Base-lin
-es.
- []
-
-[11 <./images/ERM-Low-Load-REW.png> <./images/ERM-Low-Load-AWT.png>]) [12]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 41.
+) [12]
 (./aics-sample.aux) )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 5184 strings out of 492995
- 76912 string characters out of 6132704
- 167814 words of memory out of 5000000
- 8648 multiletter control sequences out of 15000+600000
- 10780 words of font info for 42 fonts, out of 8000000 for 9000
+ 5186 strings out of 492995
+ 76937 string characters out of 6132704
+ 166834 words of memory out of 5000000
+ 8649 multiletter control sequences out of 15000+600000
+ 11139 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,12n,40p,1373b,2298s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,12n,40p,1328b,2298s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmbx9.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmex10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cmex
-tra/cmex9.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmmi10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmmi5.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mmi7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
-i9.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10
-.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pf
-b></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><
-/usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></
-usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></us
-r/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/
-local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/lo
-cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/loc
-al/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/local
-/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on aics-sample.pdf (12 pages, 921070 bytes).
+cmbxti10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmex10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cme
+xtra/cmex9.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmmi10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmmi5.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmmi7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+mi9.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.p
+fb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb>
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
+/usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></u
+sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr
+/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/l
+ocal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/lo
+cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/loca
+l/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on aics-sample.pdf (12 pages, 927969 bytes).
 PDF statistics:
- 138 PDF objects out of 1000 (max. 8388607)
- 86 compressed objects within 1 object stream
+ 142 PDF objects out of 1000 (max. 8388607)
+ 89 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  46 words of extra memory for PDF output out of 10000 (max. 10000000)
 
