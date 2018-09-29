@@ -26,7 +26,8 @@ Reinforcement Learning (RL) has been extensively used in urban traffic control (
 
 This study proposes the usage of Independent Deep Q-Network (IDQN) to train multiple heterogeneous agents, which is a more realistic scenario given heterogeneity of junction layouts in the city. We use Deep Q-Networks (DQNs) using prioritized experience replay to train each individual agent separately for its own conditions. We enrich this approach with fingerprinting to disambiguate the age of the data sampled from the replay memory to mitigate non-stationarity effects resulting from other agents affecting the environment. 
 
-Our IDQN approach is evaluated on three connected heterogeneous junctions in low and high traffic conditions, implementing different combinations of standard and prioritized experience replay and fingerprinting. Results show that IDQN is suitable approach to optimization in heterogeneous UTC with the best performance achieved by the combination of IDQN with prioritized experience replay and fingerprinting.  
+Our IDQN approach is evaluated on three connected heterogeneous junctions in low and high traffic conditions, implementing different combinations of standard and prioritized experience replay and fingerprinting. Results show that IDQN is suitable approach to optimization in heterogeneous UTC with the best performance achieved by the combination of IDQN with prioritized experience replay but without fingerprinting.  
+%todo: clarify if this is true!!
 
 %The most promising technique used in urban traffic control (UTC) has been Reinforcement Learning (RL) due to its capacity to learn the dynamics of complex problems. The main problem of this approach is the curse of dimensionality that arises from the exponential growth of the state and action spaces because of the number of intersections.
 	%	Deep Reinforcement Learning (DRL) enhances hugely the performance of RL. DRL has proved to work very well for UTC in single agent environments. Nonetheless, when the problem scales up to multiple intersections the need for coordination becomes too complex, and as a result, the latest studies take advantage of the similarity of agents to train them as one. However, the usage of homogeneous junctions is not a real world scenario where a city has different layouts of intersections.
@@ -35,9 +36,9 @@ Our IDQN approach is evaluated on three connected heterogeneous junctions in low
 
 \section{Introduction}
 
-%todo: change to traffic intro
+
 This research addresses heterogeneous multi-agents for  urban traffic control (UTC) systems as the first study applying Deep Reinforcement Learning (DRL) in a heterogeneous network layout which is a reflection of the cities in the real world. 
-%todo:
+%todo:change to traffic intro
 % repeat from intro extnesively used
 % issue limited size of state-action space limiting discretiziation of environment
 % drl acancesv enabled more finegraded, ie image from cameras, and instead of limiting to tabulerq-learning, large state space using neural networks rather than tabluer representations
@@ -106,7 +107,7 @@ Y_{t}^{DDQN} = R_{t+1} + \gamma Q(s_{t+1}, \argmax_{a} Q(s_{t+1}, a;\theta_{t});
 
 \paragraph{\textbf{Prioritized Experience Replay}}
 
-\cite{SchaulQAS15} presented prioritized experience replay which detaches agents from considering transitions with the same frequency that they are experienced. Prioritized replay samples more frequently transitions from which there is a high expected learning progress. as measured by the magnitude of their temporal-difference (TD) error. It samples transitions with probability p$_{t}$ relative to the last encountered absolute TD error:
+\cite{SchaulQAS15} presented prioritized experience replay which detaches agents from considering transitions with the same frequency that they are experienced. Prioritized replay samples more frequently transitions from which there is a high expected learning progress, as measured by the magnitude of their temporal-difference (TD) error. It samples transitions with probability p$_{t}$ relative to the last encountered absolute TD error:
 	
 \begin{equation}
 p_{t} \propto \left|\left(R_{t+1} + \gamma_{t+1} \max_{a'}Q\left(s',a';\theta_{i}^{-}\right) - Q\left(s,a;\theta_{i}\right)\right)\right|^{\omega}
@@ -124,7 +125,7 @@ Q(s,a;\theta,\alpha,\beta) = V(s;\theta,\beta) + \left( A\left(s,a;\theta,\alpha
 	
 %\subsection{Multi-Agent Reinforcement Learning} \label{sec:MARL}
 
-%TODO: why are we explaining this?
+
 
 %Consider a cooperative multi-agent environment where \textit{n} agents identified by a $\epsilon$ A $\equiv$ $\{$1,..., n$\}$ participate in a stochastic game G, denoted by a tuple $<$S, U, P, r, Z, O, n, $\gamma>$. The environment consists of states s$_{t}$ $\epsilon$ S, where at every time step t, each agent takes an action \textit{u$^{a}_{t}$} $\epsilon$ U, forming a joint action \textbf{u$_{t}$} $\epsilon$ \textbf{U} $\equiv$ U$^{n}$.
 %The transition probabilities are defined by P(s$_{t+1}$ $|$ s$_{t}$, u$_{t}$) : S x U x S $\rightarrow$ [0, 1]. A global reward function r(s$_{t}$, u$_{t}$) : S x U $\rightarrow$ $\mathbb{R}$ is shared between all the agents.
@@ -281,29 +282,25 @@ AWT = \frac{\sum^{t=1}_{N}{W_{t}}}{N}
 \end{equation}
 \end{itemize}
 
-We evaluate the following techniques:
-%todo: why do we evaluate these?
+We implement and evaluate the following combinations of IDQN, experience replay, and fingerprinting, to assess impact of each component on the performance :
+
 
 \begin{itemize}
-\item \textbf{Fixed Time / Round Robin (FT)}. Baseline in which the order of phases is fixed and preconfigured.
-
 \item \textbf{IDQN without experience replay (PEMR Disabled)}, therefore the agent cannot store experiences.
-
-\item \textbf{IDQN with prioritized experience replay (PEMR)}. 
-
-\item \textbf{IDQN with prioritized experience replay and fingerprint (PEMR + FP)}. This is the proposed IDQN technique with the fingerprint to disambiguate the age of experience replays.
-
 \item \textbf{IDQN with standard experience replay (EMR)}.
-%TODO: why did we do standard vs prioritized and whats the difference?
+\item \textbf{IDQN with prioritized experience replay (PEMR)}. 
+\item \textbf{IDQN with prioritized experience replay and fingerprint (PEMR + FP)}. This is the proposed IDQN technique with the fingerprint to disambiguate the age of experience replays.
 \end{itemize}
 
-Every technique is tested in the following scenarios:
+We evaluate the approach against the fixed time (FT) baseline, in which order of the phases is fixed and preconfigued; phases are actuated in a round robin manner. 
+
+Every technique is tested in the following traffic conditions:
 
 \begin{itemize}
 \item \textbf{Low traffic load}. 1300 to 1600 cars are simulated per 3600 time steps. With efficient traffic control the scenario is expected to result in smooth traffic flow, but any control inefficiencies will result in longer queues. 
 \item \textbf{High traffic load}. 1900 to 2500 cars are simulated per 3600 time steps.  This scenario represents the traffic load in peek times. It is designed to produce long queues and traffic jams even with efficient control. The idea is to verify if it is possible and how much can be reduced in such a overcrowded scenario. 
 \end{itemize}
-%TODO: need to put in exact figures
+
 
 \subsection{Results and analysis}
 
@@ -349,20 +346,21 @@ The Figure \ref{fig:LowHighIDQNExp} presents the results of the experiments exec
     %\caption{High Traffic IDQN Experiments}\label{fig:HighIDQNExp}
 %\end{figure}
 
-As can be seen from the Figure \ref{fig:LowIDQNREW}, \textit{FT} gets a constant reward range that varies extremely low around 50 due to it does not adjust its performance. Also, \textit{PEMR Disabled} gets very bad rewards, even worse than the FT, and it never learns. Therefore, disabling the experience replay is not useful for our problem. Finally, we compare \textit{PERM} and \textit{PEMR + FP}, which show identical performance getting 400$\%$ bigger rewards than \textit{FT}. They also learn very well in spite of the non-stationarity, increasing the rewards from around 25-100 in the exploration phase up to around 200-250 in the exploitation phase. They reach their optimal point at 300 episodes, where they get to keep a stable rewarding. Based on this similarity of results, we deduce that the fingerprint is not helping.
+As can be seen from the Figure \ref{fig:LowIDQNREW}, even in low traffic conditions, \textit{FT} gets a constant reward range that varies extremely low around 50 due to it not adapting its performance to the traffic conditions. \textit{PEMR Disabled} also gets very low rewards, even worse than the FT, as it never successfully learns to adapt. Therefore, disabling the experience replay is not useful for our problem. Finally, \textit{PERM} and \textit{PEMR + FP}, show identical performance, getting 400$\%$ bigger rewards than \textit{FT}. They both learn very well in spite of the non-stationarity, increasing the rewards from around 25-100 in the exploration phase up to around 200-250 in the exploitation phase. They reach their optimal point at 300 episodes, where they get to keep a stable rewarding. Based on this similarity of results, we deduce that the fingerprint in low traffic loads is not helping.
 
-As illustrated in figure \ref{fig:HighIDQNREW}, \textit{FT} seems to make a good job in this scenario along with \textit{PEMR}, both outperforms \textit{PEMR Disabled} and \textit{PEMR + FP} in around 25$\%$. It seems that the extra layer of the fingerprint reduces the performance of the technique under intense traffic loads. Moreover, none DRL technique gets to learn over the episodes. This can indicate that the agents needs more training for such a high load. 
+%todo: read/decribe results to know the conclusion and to fix text
+As illustrated in figure \ref{fig:HighIDQNREW}, in high traffic conditions, \textit{FT} actually performs well in terms of the reward, and in line with \textit{PEMR}, with both outperforming \textit{PEMR Disabled} and \textit{PEMR + FP} by around 25$\%$. We conclude that the extra layer of the fingerprint reduces the performance of the technique under intense traffic loads. Moreover, none of the DRL technique learn sufficiently over the episodes. These results indicate that the agents longer training training for such a high load. 
 
-The Figure \ref{fig:LowIDQNAWT} presents the waiting time for low traffic. \textit{FT} gets the same  behaviour than the rewards. In the case of \textit{PEMR Disabled}, it  produces extremely high waiting times. Alike in rewards, \textit{PEMR} and \textit{PEMR + FP} get similar performance, with very low waiting times which are approximately 300$\%$ less than \textit{FT}. From these results we can also conclude that the fingerprinting is not helping. In high traffic load, the the results are similar. \textit{PEMR + FP} outperform slightly \textit{PEMR}. Alike the rewarding results, there is not learning across the training.
+The Figure \ref{fig:LowIDQNAWT} presents the waiting time for low traffic. \textit{FT} waiting time follows the same pattern as its rewards. \textit{PEMR Disabled} produces extremely high waiting times. Similarly to their performance with respect to rewards, \textit{PEMR} and \textit{PEMR + FP} get similar performance, with very low waiting times which are approximately 300$\%$ less than \textit{FT}. From these results we can confirm that the fingerprinting is not helping, as observed when analyzing the rewards. In high traffic load, the results are similar. \textit{PEMR + FP} outperform slightly \textit{PEMR}. Similarly to the reward results, no DRL approach successfully learns in the amount of time given for the training.
 
-The unexpected performance of the fingerprint can be caused by:  
+The unexpectedly bad performance of the fingerprint can be caused by:  
 %todo: remove the first hypothesis since not tested. or downloplayd it
 \begin{itemize}
-\item \textbf{Not proper selection of fingerprint.} Fingerprint do not correlate enough with the true value of state-action pairs given the other agents' policies and/or it does not vary smoothly over training, which does not allow the model to generalise across experiences in which the other agents execute policies as they learn.
-\item \textbf{Prioritized experience replay is good enough to deal with the non-stationarity.} Due to importance weights that allow to know what records are more valuable samples, which helps to disambiguate the age of the data.
+\item \textbf{Unsuitable selection of the fingerprint.} It is possible that the fingerprint we selected does not correlate well enough with the true value of state-action pairs given the other agents' policies and/or it does not vary smoothly over training, which does not allow the model to generalise across experiences in which the other agents execute policies as they learn.
+\item \textbf{Prioritized experience replay is good enough to deal with the non-stationarity without adding fingerprints.} Importance weights that allow prioritized experience replay to identify more valuable samples, unlike standard experience replays, might remove the need for fingerprinting to disambiguate the age of the data.
 \end{itemize}
 
-We only verify the second hypothesis by executing a test with \textit{EMR}. The figure \ref{fig:ERMIDQNExp} shows this additional experiment which compares \textit{EMR} against \textit{PEMR + FP}. As shown in Figure \ref{fig:ERMIDQNREW}, both techniques learn well, but \textit{PEMR + FP} obtains higher rewards outperforming \textit{ERM} in around 45$\%$ in the highest point of \textit{PEMR + FP}. Figure \ref{fig:ERMIDQNAWT} illustrates how they get a similar performance in waiting time, but \textit{EMR} is  more stable than \textit{PEMR + FP} by not producing peeks. Regardless of the waiting time, we conclude the Prioritized Experience Replay helps to deal with the non-stationarity by getting bigger rewards, which indicates that \textit{PEMR} has better performance than \textit{EMR}. The waiting time results are a direct result of the reward function, and \textit{PEMR} is getting better results. It could be a correlation problem of the reward function if the waiting time is not decreasing proportionally to the rewards. These results prove that \textit{PEMR} can be good enough to deal with the non-stationarity. However, \textit{PEMR + FP} could improve by selecting a better fingerprint.
+To test the second hypothesis, we run an experiment using only normal experience replay, i.e., \textit{EMR}. The figure \ref{fig:ERMIDQNExp} shows this additional experiment which compares \textit{EMR} against \textit{PEMR + FP}. As shown in Figure \ref{fig:ERMIDQNREW}, both techniques learn well, but \textit{PEMR + FP} obtains higher rewards outperforming \textit{ERM} in around 45$\%$ in the highest point of \textit{PEMR + FP}. Figure \ref{fig:ERMIDQNAWT} illustrates how they get a similar performance in waiting time, but \textit{EMR} is  more stable than \textit{PEMR + FP} by not producing peeks. Regardless of the waiting time, we conclude the Prioritized Experience Replay helps to deal with the non-stationarity by getting bigger rewards, which indicates that \textit{PEMR} has better performance than \textit{EMR}. The waiting time results are a direct result of the reward function, and \textit{PEMR} is getting better results. It could be a correlation problem of the reward function if the waiting time is not decreasing proportionally to the rewards. These results prove that \textit{PEMR} can be good enough to deal with the non-stationarity. However, \textit{PEMR + FP} could improve by selecting a better fingerprint.
 
 \begin{figure}[!htbp]
     \centering
