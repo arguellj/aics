@@ -12,7 +12,7 @@
 % --- TITLE AND AUTHOR INFORMATION
 \title{Heterogeneous Multi-Agent Deep Reinforcement Learning for Traffic Lights Control}
 \author{Jeancarlo Arguello Calvo, Ivana Dusparic}
-\institute{School of Computer Science and Statistics, University of Dublin, Trinity College \\
+\institute{School of Computer Science and Statistics, Trinity College Dublin\\
 \email{arguellj@tcd.ie, ivana.dusparic@scss.tcd.ie} }
 % --- END OF PREAMBLE 
 
@@ -22,7 +22,7 @@
 
 \begin{abstract}
 
-Reinforcement Learning (RL) has been extensively used in urban traffic control (UTC) optimization due its capability to learn the dynamics of complex problems from interactions with the environment. Recent advances in Deep Reinforcement Learning (DRL) have opened up the possibilities for extending this work to more complex situations due to it overcoming the curse of dimensionality resulting from the exponential growth of the state and action spaces when incorporating fine-grained information. DRL has been shown to work very well for UTC on a single intersection, however, due to large training times, multi-junction implementations have been limited to training a single agent and replicating behaviour to other junctions, assuming homogeneity of all agents. 
+Reinforcement Learning (RL) has been extensively used in Urban Traffic Control (UTC) optimization due its capability to learn the dynamics of complex problems from interactions with the environment. Recent advances in Deep Reinforcement Learning (DRL) have opened up the possibilities for extending this work to more complex situations due to it overcoming the curse of dimensionality resulting from the exponential growth of the state and action spaces when incorporating fine-grained information. DRL has been shown to work very well for UTC on a single intersection, however, due to large training times, multi-junction implementations have been limited to training a single agent and replicating behaviour to other junctions, assuming homogeneity of all agents. 
 
 This study proposes the usage of Independent Deep Q-Network (IDQN) to train multiple heterogeneous agents, which is a more realistic scenario given heterogeneity of junction layouts in the city. We use Dueling Double Deep Q-Networks (DDDQNs) with prioritized experience replay to train each individual agent separately for its own conditions. We enrich this approach with fingerprinting to disambiguate the age of the data sampled from the replay memory to mitigate non-stationarity effects resulting from other agents affecting the environment. 
 
@@ -35,7 +35,7 @@ Our IDQN approach is evaluated on three connected heterogeneous junctions in low
 
 \section{Introduction}
 
-Traffic congestion is often caused by an inefficient control of traffic lights on intersections, i.e., settings not sufficiently adapted to particular set of conditions. In recent years several AI-based approaches have been investigated in order to optimize traffic flow in junctions. The most promising technique has been Reinforcement Learning (RL) due to its capacity to learn the dynamics of complex problems without any human intervention. Different RL implementations have been applied in urban traffic control (UTC), both on single junctions/agents as well as on multiple junctions/agents collaborating. The main issue with RL approaches is the curse of dimensionality that arises from the exponential growth of the state and action spaces because of the number of intersections.
+Traffic congestion is often caused by an inefficient control of traffic lights on intersections, i.e., settings not sufficiently adapted to particular set of conditions. In recent years several AI-based approaches have been investigated in order to optimize traffic flow in junctions. The most promising technique has been Reinforcement Learning (RL) due to its capacity to learn the dynamics of complex problems without any human intervention. Different RL implementations have been applied in Urban Traffic Control (UTC), both on single junctions/agents as well as on multiple collaborating junctions/agents. The main issue with RL approaches is the curse of dimensionality that arises from the exponential growth of the state and action spaces because of the number of intersections.
 Combining RL with Neural Networks led to a method called Deep Reinforcement Learning (DRL) which enhances hugely the performance of RL for large scale problems. DRL techniques have demonstrated to work very well for traffic lights in single agent environments. Nonetheless, when the problem scales up to multiple intersections the need for coordination becomes more complex, and as a result, the latest studies take advantage of the similarity of agents in order to train several agents at the same time. However, assuming homogeneous junctions is not realistic as a city has a large range of different layouts of intersections.
 
 This paper proposes a solution for heterogeneous multi-junction UTC scenario. Our approach is based on the  Independent Deep Q-Network (IDQN) to achieve learning on multiple agents, with each agent using Dueling Double Deep Q-Network (DDDQN) enriched with fingerprinting to mitigate non-stationarity present in multi-agent environment. We evaluate the approach in widely used open source traffic simulator SUMO, and show it can successfully optimize the traffic flows on three heterogeneous junctions. 
@@ -51,7 +51,7 @@ The rest of this paper is organized as follows: Section 2 reviews other work in 
 
 \section{Applications of RL in UTC} \label{relatedwork}
 
-RL has been extensively applied in UTC, with some of the most advanced approaches addressing multi-agent multi-objective heterogenous scenarios \cite{Dusparic2016}. To enable using image snapshosts of the intersection as input, while dealing with the curse of dimensionality, more recent work started exploring DRL and Convolutional Neural Networks (CNN) solutions in single agent scenarios \cite{Mousavi2017,Liang2018}. Multi-agent DRL work is currently limited to solutions for homogeneous multi-agent by taking advantage of the similarity in order to train only one neural network which can be used for all agents indistinctly. Approach presented in \cite{VanDerPol2016} used transfer learning to transfer the learnt policy across the agents, while in \cite{Liu2017CooperativeDR} only one agent is trained at each training episode, and the others react based on their previously learned policies. However, in the cases where junctions are heterogenous, the knowledge is not directly reusable, and agents need to be trained separately to account for the potential impact of other agents' actions on its own environment. In the section we introduce the details of our approach addressing these issues. 
+RL has been extensively applied in UTC, with some of the most advanced approaches addressing multi-agent multi-objective heterogenous scenarios \cite{Dusparic2016}. To enable using image snapshosts of the intersection as input, while dealing with the curse of dimensionality, more recent work started exploring DRL and Convolutional Neural Networks (CNN) solutions in single agent scenarios \cite{Mousavi2017,Liang2018}. Multi-agent DRL work is currently limited to solutions for homogeneous multi-agent by taking advantage of the similarity in order to train only one neural network which can be used for all agents indistinctly. Approach presented in \cite{VanDerPol2016} used transfer learning to transfer the learnt policy across the agents, while in \cite{Liu2017CooperativeDR} only one agent is trained at each training episode, and the others react based on their previously learned policies. However, in the cases where junctions are heterogenous, the knowledge is not directly reusable, and agents need to be trained separately to account for the potential impact of other agents' actions on its own environment. In the following sections we introduce the details of our approach addressing these issues. 
 
 \section{Design of IDQN approach to UTC} \label{design}
 
@@ -147,7 +147,7 @@ A key component of DQN is the experience replay memory.  Unfortunately, the comb
 
 \subsection{State Representation}\label{sec:stateRep}
 
-	The state is a image-like representation of the current state of the simulator environment (Figure \ref{fig:simSt}), similar to the concept used in \cite{Mnih2015}. The state consists of two matrices of 64x64: (1) a binary matrix \textit{P} for vehicle positions (Figure \ref{fig:matrixP}), and (2) a matrix \textit{S} for vehicle speeds (Figure \ref{fig:matrixS}). These matrices are based on those used in previous works such as \cite{Liang2018,Liu2017CooperativeDR,VanDerPol2016}. 
+In our approach, the state is a image-like representation of the current state of the simulator environment (Figure \ref{fig:simSt}), similar to the concept used in \cite{Mnih2015}. The state consists of two matrices of 64x64: (1) a binary matrix \textit{P} for vehicle positions (Figure \ref{fig:matrixP}), and (2) a matrix \textit{S} for vehicle speeds (Figure \ref{fig:matrixS}). These matrices are based on those used in previous works such as \cite{Liang2018,Liu2017CooperativeDR,VanDerPol2016}. 
 	
 \begin{figure}
     \centering
@@ -230,7 +230,7 @@ The neural network is the same as used in \cite{Wang2016}. The Figure \ref{fig:C
 
 \section{Evaluation} \label{evaluation}
 
-In this section we present an evaluation of IDQN as solution for multi-agent DRL for heterogeneous agents in traffic light control using the traffic simulator SUMO \cite{SUMO2012}. We use OpenAI's baseline framework \cite{baselines} to implement our DDDQN with prioritized experience replay. OpenAI Baselines is a set of implementations of RL in Python which uses TensorFlow library \cite{Abadi2016}. 
+In this section we present an evaluation of IDQN as a proposed solution for multi-agent DRL for heterogeneous agents in traffic light control using the traffic simulator SUMO \cite{SUMO2012}. We use OpenAI's baseline framework \cite{baselines} to implement our DDDQN with prioritized experience replay. OpenAI Baselines is a set of implementations of RL in Python which uses TensorFlow library \cite{Abadi2016}. 
 
 \subsection{Set up and parameters}
 
@@ -369,7 +369,7 @@ To further analyse the results, we have looked into unexpectedly bad performance
 
 \section{Conclusion and future work} \label{conclusion}
 
-This paper presented IDQN as the first approach in literature to addresses heterogeneous multi-agent DRL in UTC. We evaluated IDQN's performance with different configurations in low and high traffic loads. Our experiments showed the IDQN is a suitable techniques for heterogeneous multi-agent UTC environments which can deal with the non-stationarity. The best results were obtained in the low traffic load. The high traffic load requires further investigation, by either fine-tuning hyperparamters to high load or allowing for the longer training time. We demonstrated that the experience replay is mandatory to learn efficiently, but that the fingerprint we chose did not enhance the normal prioritized experience replay. Therefore, further investigation is needed to evaluate if different fingerprints could improve the performance. Further, our technique should be evaluated against standard RL approaches, to investigate if more fine-grained sensor data enabled by the use of DRL approaches improves the performance over standard approaches.
+This paper presented IDQN as the first approach in literature to addresses heterogeneous multi-agent DRL in UTC. We evaluated IDQN's performance with different configurations in low and high traffic loads. Our experiments showed that IDQN is a suitable techniques for heterogeneous multi-agent UTC environments which can deal with the non-stationarity. The best results were obtained in the low traffic load. The high traffic load requires further investigation, by either fine-tuning hyperparamters to high load or allowing for the longer training time. We demonstrated that the experience replay is mandatory to learn efficiently, but that the fingerprint we chose did not enhance the prioritized experience replay. Therefore, further investigation is needed to evaluate if different fingerprints could improve the performance. Further, our technique should be evaluated against standard RL approaches, to investigate if more fine-grained sensor data enabled by the use of DRL approaches improves the performance over standard approaches.
 
 
 % --- BIBLIOGRAPHY
