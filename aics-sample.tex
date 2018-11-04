@@ -26,38 +26,27 @@ Reinforcement Learning (RL) has been extensively used in Urban Traffic Control (
 
 This study proposes the usage of Independent Deep Q-Network (IDQN) to train multiple heterogeneous agents, which is a more realistic scenario given heterogeneity of junction layouts in the city. We use Dueling Double Deep Q-Networks (DDDQNs) with prioritized experience replay to train each individual agent separately for its own conditions. We enrich this approach with fingerprinting to disambiguate the age of the data sampled from the replay memory to mitigate non-stationarity effects resulting from other agents affecting the environment. 
 
-Our IDQN approach is evaluated on three connected heterogeneous junctions in low and high traffic conditions, implementing different combinations of standard and prioritized experience replay and fingerprinting. Results show that IDQN is suitable approach to optimization in heterogeneous UTC with the best performance achieved by the combination of IDQN with prioritized experience replay but without fingerprinting.  
-
-%The most promising technique used in urban traffic control (UTC) has been Reinforcement Learning (RL) due to its capacity to learn the dynamics of complex problems. The main problem of this approach is the curse of dimensionality that arises from the exponential growth of the state and action spaces because of the number of intersections.
-	%	Deep Reinforcement Learning (DRL) enhances hugely the performance of RL. DRL has proved to work very well for UTC in single agent environments. Nonetheless, when the problem scales up to multiple intersections the need for coordination becomes too complex, and as a result, the latest studies take advantage of the similarity of agents to train them as one. However, the usage of homogeneous junctions is not a real world scenario where a city has different layouts of intersections.
-	%	This study proposes the usage of Independent Deep Q-Network (IDQN) to train heterogeneous multi-agents to deal with both the curse of dimensionality and the need for collaboration. The former is handled by using Deep Q-Networks. The latter is managed with IDQN, which trains simultaneously and separately each agent allowing us to support heterogeneous agents. Unfortunately, this technique can lead to convergence problems because one agent's learning makes the environment appear non-stationary to other agents, and this problem conflicts with experience replay memory on which DQN relies. We address this issue by conditioning each agent's value function on a fingerprint that disambiguates the age of the data sampled from the replay memory.
+Our IDQN approach is evaluated on three connected heterogeneous junctions in low and high traffic conditions, implementing different combinations of standard and prioritized experience replay and fingerprinting. Results show that IDQN is suitable approach to optimization in heterogeneous UTC with the best performance achieved by the combination of IDQN with prioritized experience replay but without fingerprinting.
 \end{abstract}
 
 \section{Introduction}
 
-Traffic congestion is often caused by an inefficient control of traffic lights on intersections, i.e., settings not sufficiently adapted to particular set of conditions. In recent years several AI-based approaches have been investigated in order to optimize traffic flow in junctions. The most promising technique has been Reinforcement Learning (RL) due to its capacity to learn the dynamics of complex problems without any human intervention. Different RL implementations have been applied in Urban Traffic Control (UTC), both on single junctions/agents as well as on multiple collaborating junctions/agents. The main issue with RL approaches is the curse of dimensionality that arises from the exponential growth of the state and action spaces because of the number of intersections.
-Combining RL with Neural Networks led to a method called Deep Reinforcement Learning (DRL) which enhances hugely the performance of RL for large scale problems. DRL techniques have demonstrated to work very well for traffic lights in single agent environments. Nonetheless, when the problem scales up to multiple intersections the need for coordination becomes more complex, and as a result, the latest studies take advantage of the similarity of agents in order to train several agents at the same time. However, assuming homogeneous junctions is not realistic as a city has a large range of different layouts of intersections.
+Traffic congestion is often caused by an inefficient control of traffic lights on intersections, i.e., settings not sufficiently adapted to particular set of conditions. In recent years several AI-based approaches have been investigated in order to optimize traffic flow in junctions. The most promising technique has been Reinforcement Learning (RL) due to its capacity to learn the dynamics of complex problems without any human intervention. Different RL implementations have been applied in Urban Traffic Control (UTC) \cite{Chu2017,Dusparic2016,El-Tantawy2012,Tahifa2015}, both on single junctions as well as on multiple collaborating junctions. The main issue with RL approaches is the curse of dimensionality that arises from the exponential growth of the state and action spaces because of the number of intersections.
+Combining RL with Neural Networks led to a method called Deep Reinforcement Learning (DRL) which enhances hugely the performance of RL for large scale problems. DRL techniques have demonstrated to work very well for UTC in single agent environments \cite{Gao2017,Li2016,Liang2018,Mousavi2017}. Nonetheless, when the problem scales up to multiple intersections the need for coordination becomes more complex, and as a result, the latest studies take advantage of the similarity of agents in order to train several agents at the same time \cite{Liu2017CooperativeDR,VanDerPol2016}. However, assuming homogeneous junctions is not realistic as a city has a large range of different layouts of intersections.
 
 This paper proposes a solution for heterogeneous multi-junction UTC scenario. Our approach is based on the  Independent Deep Q-Network (IDQN) to achieve learning on multiple agents, with each agent using Dueling Double Deep Q-Network (DDDQN) enriched with fingerprinting to mitigate non-stationarity present in multi-agent environment. We evaluate the approach in widely used open source traffic simulator SUMO, and show it can successfully optimize the traffic flows on three heterogeneous junctions. 
 
-% in this paper we use dqn for single junction, idqn, a drl variant of independent q-learning to address multiple heterongeout junctions. to remove effects or non staionarytiy we use fignerptinting (check what it does)
-%the rest of this paper is organized as follows
-
-
-
 The rest of this paper is organized as follows: Section 2 reviews other work in DRL in UTC. Chapter 3 presents the techniques our approach is based on as well as the design specifics of our proposed IDQN technique. Chapter 4 presents the simulation environment, experiment design, results and their analysis, while Section 5 concludes the paper discussing avenues for future work. 
-
-
 
 \section{Applications of RL in UTC} \label{relatedwork}
 
-RL has been extensively applied in UTC, with some of the most advanced approaches addressing multi-agent multi-objective heterogenous scenarios \cite{Dusparic2016}. To enable using image snapshosts of the intersection as input, while dealing with the curse of dimensionality, more recent work started exploring DRL and Convolutional Neural Networks (CNN) solutions in single agent scenarios \cite{Mousavi2017,Liang2018}. Multi-agent DRL work is currently limited to solutions for homogeneous multi-agent by taking advantage of the similarity in order to train only one neural network which can be used for all agents indistinctly. Approach presented in \cite{VanDerPol2016} used transfer learning to transfer the learnt policy across the agents, while in \cite{Liu2017CooperativeDR} only one agent is trained at each training episode, and the others react based on their previously learned policies. However, in the cases where junctions are heterogenous, the knowledge is not directly reusable, and agents need to be trained separately to account for the potential impact of other agents' actions on its own environment. In the following sections we introduce the details of our approach addressing these issues. 
+RL has been extensively applied in UTC \cite{Chu2017,Dusparic2016,El-Tantawy2012,Tahifa2015}. To enable using image snapshosts of the intersection as input, while dealing with the curse of dimensionality, more recent work started exploring DRL and Convolutional Neural Networks (CNN) solutions in single agent scenarios \cite{Mousavi2017,Liang2018}. Multi-agent DRL work is currently limited to solutions for homogeneous multi-agent by taking advantage of the similarity in order to train only one neural network which can be used for all agents indistinctly. Approach presented in \cite{VanDerPol2016} used transfer learning to transfer the learnt policy across the agents, while in \cite{Liu2017CooperativeDR} only one agent is trained at each training episode, and the others react based on their previously learned policies. However, in the cases where junctions are heterogenous, the knowledge is not directly reusable, and agents need to be trained separately to account for the potential impact of other agents' actions on its own environment.
 
 \section{Design of IDQN approach to UTC} \label{design}
 
 This paper proposes the usage of DRL to deal with the curse of dimensionality, that traditional RL approaches encounter, by using Neural Networks. To train multiple heterogeneous agents, it uses Independent Q-Learning (IQL), where each agent learns independently and simultaneously its own policy, treating other agents as part of the environment. However, the environment becomes nonstationary from the point of view of each agent, as it involves the interaction with other agents who are themselves learning at the same time, ruling out any convergence guarantees. The technique we used is Dueling Double Deep Q-Networks (DDDQN), which relies in a component called experience replay memory in order to stabilize and improve the learning. (We have used Dueling Networks, Double DQN and Prioritized Experience Replay to improve the training over standard DQN). However, experience replay technique is incompatible with non-stationary environments. In order to combine the experience replay memory and IQL, we used a technique of fingerprinting which stabilizes the memory against the non-stationarity. This fingerprint disambiguates the age of the data sampled from the replay memory. 
 
-In this section we describe all the techniques underlying our approach, as well as present specific ways in which these are combined in our approach. We then detail the specifics of all RL components in our implementation, namely the design of the state space, action space, and reward function, and deep neural network architecture. 
+In this section we describe all the techniques underlying our approach. We then detail all RL components in our implementation, namely the design of the state space, action space, reward function, and deep neural network architecture. 
 
 \subsection{Deep Reinforcement Learning}
 
@@ -91,13 +80,13 @@ In situations with a large state and action spaces it is unfeasible to learn Q v
 L_{i}(\theta_{i}) = \ E_{(s,a,r,s) \sim U(D)} \left[ \left(r + \gamma \max_{a'}Q\left(s',a';\theta_{i}^{-}\right) - Q\left(s,a;\theta_{i}\right)\right)^{2} \right]
 \end{equation}
 
-where $\theta_{i}$ are the parameters of the Q-network at iteration i and $\theta_{i}^{-}$ are the target network parameters. The target network parameters are only updated with the Q-network parameters every C steps and are held fixed between individual updates.
+where $\theta_{i}$ are the Q-network parameters at iteration i and $\theta_{i}^{-}$ are the target network parameters. The target network parameters are updated with the Q-network parameters every C steps and are held fixed between individual updates.
 
 \paragraph{\textbf{Double DQN}}
 
-	The max operator in standard Q-learning and DQN uses the same values both to select and to evaluate an action. It is known the this maximization sometimes produces to learn unrealistically high action values which tends to prefer overestimated values over underestimated values, resulting in overoptimistic value estimations. To prevent this, Double Q-learning decouples the selection and the evaluation \cite{Hasselt2010}.
+	The max operator in standard Q-learning and DQN uses the same values both to select and to evaluate an action, which produces likely to select overestimated values, resulting in overoptimistic value estimates. To prevent this, Double Q-learning decouples the selection and the evaluation \cite{Hasselt2010}.
 	
-	For DQN architectures is not desired to fully decoupled the target  as in \cite{Hasselt2010} because the target network provides a intuitive option for the second value function, without having to include extra networks. For that reason, \cite{Hasselt:2016:DRL:3016100.3016191} propose to evaluate the greedy policy according to the online network, but using the target network to estimate its value given as result the Double DQN (DDQN) algorithm:
+	For DQN architectures is not desired to fully decouple the target as in \cite{Hasselt2010} because the target network provides a intuitive option for the second value function, without having to include extra networks. For this reason, \cite{Hasselt:2016:DRL:3016100.3016191} proposes to evaluate the greedy policy according to the online network, but using the target network to estimate its value given as result the Double DQN (DDQN) equation:
 	
 \begin{equation}
 Y_{t}^{DDQN} = R_{t+1} + \gamma Q(s_{t+1}, \argmax_{a} Q(s_{t+1}, a;\theta_{t});\theta_{i}^{-})
@@ -105,7 +94,7 @@ Y_{t}^{DDQN} = R_{t+1} + \gamma Q(s_{t+1}, \argmax_{a} Q(s_{t+1}, a;\theta_{t});
 
 \paragraph{\textbf{Prioritized Experience Replay}}
 
-\cite{SchaulQAS15} presented prioritized experience replay which detaches agents from considering transitions with the same frequency that they are experienced. Prioritized replay samples more frequently transitions from which there is a high expected learning progress, as measured by the magnitude of their temporal-difference (TD) error. It samples transitions with probability p$_{t}$ relative to the last encountered absolute TD error:
+\cite{SchaulQAS15} presented prioritized experience replay which detaches agents from considering transitions with the same frequency that they are experienced. Prioritized replay more frequently samples transitions from which there is a high expected learning progress, as measured by the magnitude of their temporal-difference (TD) error. It samples transitions with probability p$_{t}$ relative to the last encountered absolute TD error:
 	
 \begin{equation}
 p_{t} \propto \left|\left(R_{t+1} + \gamma_{t+1} \max_{a'}Q\left(s',a';\theta_{i}^{-}\right) - Q\left(s,a;\theta_{i}\right)\right)\right|^{\omega}
@@ -115,35 +104,18 @@ Where $\omega$ is a hyper-parameter that determines the pattern of the distribut
 
 \paragraph{\textbf{Dueling Network}}\label{duelingNet}
 
-Dueling Network is a technique proposed by \cite{Wang2016} which computes separately the value V(s) and advantage A(s, a) functions that are represented by a duelling architecture that consists of two streams where each stream represents one of these functions. These two streams are combined by an convolutional layer to produce an estimate of the state-action value Q(s, a). The dueling network automatically produces separate estimates of the state value and advantage functions without supervision. Besides that, it can learn which states are valuable, without having to explore the consequence of each action for each state. Dueling network is defined with the equation:
+A dueling network is a technique proposed by \cite{Wang2016} which computes separately the value V(s) and advantage A(s, a) functions that are represented by a duelling architecture that consists of two streams where each stream represents one of these functions. These two streams are combined by an convolutional layer to produce an estimate of the state-action value Q(s, a). The dueling network automatically produces separate estimates of the state value and advantage functions without supervision. Besides that, it can learn which states are valuable, without having to explore the consequence of each action for each state.By using this approach, Dueling DQN achieves faster training over DQN. Dueling network is defined with the equation:
 
 \begin{equation} \label{eq:dueling eq}
 Q(s,a;\theta,\alpha,\beta) = V(s;\theta,\beta) + \left( A\left(s,a;\theta,\alpha \right) - \frac{1}{|\mathcal{A}|} \displaystyle\sum_{a'} A\left(s,a;\theta,\alpha \right) \right) 
 \end{equation}
 
-By using this approach, Dueling DQN achieves faster training over DQN. 
-	
-%\subsection{Multi-Agent Reinforcement Learning} \label{sec:MARL}
-
-
-
-%Consider a cooperative multi-agent environment where \textit{n} agents identified by a $\epsilon$ A $\equiv$ $\{$1,..., n$\}$ participate in a stochastic game G, denoted by a tuple $<$S, U, P, r, Z, O, n, $\gamma>$. The environment consists of states s$_{t}$ $\epsilon$ S, where at every time step t, each agent takes an action \textit{u$^{a}_{t}$} $\epsilon$ U, forming a joint action \textbf{u$_{t}$} $\epsilon$ \textbf{U} $\equiv$ U$^{n}$.
-%The transition probabilities are defined by P(s$_{t+1}$ $|$ s$_{t}$, u$_{t}$) : S x U x S $\rightarrow$ [0, 1]. A global reward function r(s$_{t}$, u$_{t}$) : S x U $\rightarrow$ $\mathbb{R}$ is shared between all the agents.
-
-%Each agent's observations z $\epsilon$ Z follows an observation function O(s$_{t}$, a) : S x A $\rightarrow$ Z. Each agent \textit{a} conditions its behaviour on its own action-observation history $\tau_{a}$ $\epsilon$ T $\equiv$ (Z x U)*, according to its policy $\pi_{a}$(u$_{a}$ $|$ $\tau_{a}$) : T x U $\rightarrow$ [0, 1]. After each transition, the action u$_{t}^{a}$ and new observation O(s$_{t}$, a) are added to $\tau_{a}$, forming $\tau_{a}^{'}$. Let the joint quantities over agents be in bold, and the joint quantities over agents other than \textit{a} with the subscript \textit{-a}, so that, e.g., \emph{u} = [u$_{t}^{t}$, \textbf{u}$_{-a}$].
-
 \paragraph{\textbf{Multi-agent learning: Independent DQN}}
-In a multi-agent setting, multiple agents can collaborate directly by exchanging Q-values or jointly deciding on actions, or can operate independently in the shared environment, such as in the case of Independent Q-Learning (IQL)\cite{Tan1993}. Independent DQN (IDQN) is an extension of IQL for DRL environments using DQN, where each agent \textit{a} observes the partial state s$_{t}^{a}$, selects an individual action \textit{u$_{t}^{a}$}, and receives a team reward, r$_{t}$ shared among all agents. \cite{Tampuu2015} combines DQN with independent Q-learning, where each agent \textit{a} independently and simultaneously learns its own Q-function \textit{Q$^{a}(s, u^{a};\theta^{a}_{i})$} \cite{DBLP:journals/corr/FoersterAFW16a}. Since our setting is partially observable, IDQN can be implemented by having each agent conditioned on its action-observation history, i.e., Q$_{a}$($\tau_{a}$, u$_{a}$). In DRL, this can be implemented by given to each agent a DQN on its own observations and actions.
+In a multi-agent setting, multiple agents can collaborate directly by exchanging Q-values or jointly deciding on actions, or can operate independently in the shared environment, such as in the case of Independent Q-Learning (IQL) \cite{Tan1993}. Independent DQN (IDQN) is an extension of IQL for DRL environments using DQN, where each agent \textit{a} observes the partial state s$_{t}^{a}$, selects an individual action \textit{u$_{t}^{a}$}, and receives a team reward, r$_{t}$ shared among all agents. \cite{Tampuu2015} combines DQN with independent Q-learning, where each agent \textit{a} independently and simultaneously learns its own Q-function \textit{Q$^{a}(s, u^{a};\theta^{a}_{i})$} \cite{DBLP:journals/corr/FoersterAFW16a}. Since our setting is partially observable, IDQN can be implemented by having each agent conditioned on its action-observation history, i.e., Q$_{a}$($\tau_{a}$, u$_{a}$). In DRL, this can be implemented by given to each agent a DQN on its own observations and actions.
 
 \paragraph{\textbf{Fingerprinting in IQL}}
 
 A key component of DQN is the experience replay memory.  Unfortunately, the combination of experience replay with IQL is problematic because the non-stationarity introduced by IQL results in data in experience replay memory no longer indicating the current dynamics in which the agent is learning. To address this issue, \cite{Foerster2017} introduced a fingerprint technique, which associates the data in replay memory with the age of the data, i.e., where in training trajectory does it originate from. It gradually changes over training time in order to allow the model to generalise across experiences in which the other agents execute policies as they learn.
-
-
-
-%Prior to RDL, several RL approaches for heterogenous multi-agent UTC environments were done as in \cite{Dusparic2016,Chu2017,Tahifa2015,El-Tantawy2012}. However, the techniques used cannot be extended to DRL. Recent works started to explore DRL solutions for UTC in single agent scenarios to deal with the curse of dimensionality as in \cite{Li2016,Mousavi2017,Gao2017,Liang2018}. These studies started to represent the state as snapshots of the intersection in order to use Convolutional Neural Networks. The variables obtained from the images are position and speed of vehicles, however those are processed and expressed differently on each study.
-
-%The DNNs architecture are getting more complex over the years. First approaches only considered a simple CNN, but later on the new techniques were aggregated to improve the stability and performance of the training such as DDQN, Dueling Networks and Prioritized Experience Replay. All these single agent approaches obtained good results. Because of that, they were extended to multi-agent scenarios as in \cite{Belletti2018,VanDerPol2016,Liu2017CooperativeDR}. \cite{Belletti2018} used DRL for controlling the metering of highway on-ramps modelling the problem as discretized non-linear partial differential equations in a robust and non-parametric manner. \cite{VanDerPol2016,Liu2017CooperativeDR} implemented solutions for homogeneous multi-agent by taking advantage of the similarity in order to train only one Neural Network which can be used for all agents indistinctly. \cite{VanDerPol2016} used transfer planning and max-plus algorithm. While, \cite{Liu2017CooperativeDR} used a IQL variation where only one agent is trained at each training episode, and the others react based on their previously learned policies. After an amount of iterations, the latest agent's policy is distributed to the other agents, and the training agent is changed to another one to start a new training cycle. 
 
 \subsection{State Representation}\label{sec:stateRep}
 
@@ -226,7 +198,7 @@ r_{t} = \begin{cases}
 \end{center}
 \end{figure}
 
-The neural network is the same as used in \cite{Wang2016}. The Figure \ref{fig:CNN} illustrates the Deep Neural Network. Every agent has its own Neural Network copy in order to allow it to learn its own local policy since every agent is trained independently by using IDQN.
+The Figure \ref{fig:CNN} illustrates the Deep Neural Network which is the same as used in \cite{Wang2016}. Every agent has its own neural network copy in order to allow it to learn its own local policy since every agent is trained independently by using IDQN.
 
 \section{Evaluation} \label{evaluation}
 
@@ -244,7 +216,7 @@ We run the test in the network layout shown in Figure \ref{fig:simSetup}, which 
 \end{center}
 \end{figure}
 
-The table \ref{tab:MARLhyp} describes the hype-parameters used. Every episode corresponds to 1 hour of simulation time which is 3600 time steps, where every time step is 1 simulated second.
+Table \ref{tab:MARLhyp} lists the hyper-parameters used. Every episode corresponds to 1 hour of simulation time which is 3600 time steps, where every time step is 1 simulated second. The values were first chosen from a combination of \cite{Liang2018,SchaulQAS15,VanDerPol2016,Wang2016}, and then tuned through several iterations of single and multi-agent experiments.
 
 \begin{table}
 \centering
@@ -271,16 +243,9 @@ The table \ref{tab:MARLhyp} describes the hype-parameters used. Every episode co
 \label{tab:MARLhyp}
 \end{table}
 
-We select two metrics that have been used in several DRL studies for UTC. Every metric is taken per episode. The metrics are the following:
-
-\begin{itemize}
-	\item \textbf{Cumulative Reward}. The reward \textit{r$_{t}$} taken on every time step \textit{t} is accumulated until the episode is finished.
-	
-	\item \textbf{Average Waiting Time}. This is the sum of all \textit{W$_{t}$} divided by the number of time steps in the episode.  SUMO defines the waiting time for a vehicle as the time (in seconds) spent with a speed below 0.1 m/s since the last time it was faster than 0.1 m/s.
-\end{itemize}
+We select two metrics that have been used in several DRL studies for UTC. Every metric is taken per episode. \textbf{Cumulative Reward} is the sum of rewards \textit{r$_{t}$} taken on every time step \textit{t} until the episode is finished. The \textbf{Average Waiting Time} is the sum of all \textit{W$_{t}$} divided by the number of time steps in the episode. SUMO defines the waiting time for a vehicle as the time (in seconds) spent with a speed below 0.1 m/s since the last time it was faster than 0.1 m/s.
 
 We implement and evaluate the following combinations of IDQN, experience replay, and fingerprinting, to assess impact of each component on the performance:
-
 
 \begin{itemize}
 \item \textbf{IDQN without experience replay (PEMR Disabled)}, therefore the agent cannot store experiences.
@@ -289,15 +254,9 @@ We implement and evaluate the following combinations of IDQN, experience replay,
 \item \textbf{IDQN with prioritized experience replay and fingerprint (PEMR + FP)}. This is the proposed IDQN technique with the fingerprint to disambiguate the age of experience replays.
 \end{itemize}
 
-We evaluate the approach against the \textbf{fixed time (FT)} baseline, in which order of the phases is fixed and preconfigued; phases are actuated in a round robin manner. 
+We evaluate the approach against the \textbf{fixed time (FT)} baseline, in which order of the phases is fixed and preconfigured; phases are actuated in a round robin manner. 
 
-Every technique is tested in the following traffic conditions:
-
-\begin{itemize}
-\item \textbf{Low traffic load}. 1300 to 1600 cars are simulated per 3600 time steps. With efficient traffic control the scenario is expected to result in smooth traffic flow, but any control inefficiencies will result in longer queues. 
-\item \textbf{High traffic load}. 1900 to 2500 cars are simulated per 3600 time steps.  This scenario represents the traffic load in peak times.  
-\end{itemize}
-
+Every technique is tested in two traffic conditions. A \textbf{low traffic load} which consists of 1300 to 1600 cars per episode. With efficient traffic control the scenario is expected to result in smooth traffic flow, but any control inefficiencies will result in longer queues. And a \textbf{high traffic load} which consists of 1900 to 2500 cars per episode.  This scenario represents the traffic load in peak times.  
 
 \subsection{Results and analysis} 
 
@@ -344,13 +303,11 @@ The Figure \ref{fig:LowHighIDQNExp} presents the results of the experiments exec
 %\end{figure}
 
 As can be seen from the Figure \ref{fig:LowIDQNREW}, in low traffic conditions, \textit{FT} gets a constant reward range that varies extremely low around 50 due to it not adapting its performance to the traffic conditions. \textit{PEMR Disabled} also gets very low rewards, even worse than the FT, as it never successfully learns to adapt. Therefore, disabling the experience replay is not useful for our problem. Finally, \textit{PEMR} and \textit{PEMR + FP}, show identical performance, getting 400$\%$ bigger rewards than \textit{FT}. They both learn very well in spite of the non-stationarity, increasing the rewards from around 25-100 in the exploration phase up to around 200-250 in the exploitation phase. They reach their optimal point at 300 episodes, where they get to keep a stable rewarding. Based on this similarity of results, we deduce that the fingerprint in low traffic loads is not helping.
-
 As illustrated in figure \ref{fig:HighIDQNREW}, in high traffic conditions, \textit{FT} actually performs well in terms of the reward, and in line with \textit{PEMR}, with both outperforming \textit{PEMR Disabled} and \textit{PEMR + FP} by around 25$\%$. We conclude that the extra layer of the fingerprint reduces the performance of the technique under intense traffic loads. Moreover, none of the DRL technique learn sufficiently over the episodes. These results indicate that the agents need longer training time for such a high load. 
 
 The Figure \ref{fig:LowIDQNAWT} presents the waiting time for low traffic. \textit{FT} waiting time follows the same pattern as its rewards. \textit{PEMR Disabled} produces extremely high waiting times. Similarly to their performance with respect to rewards, \textit{PEMR} and \textit{PEMR + FP} get similar performance, with very low waiting times which are approximately 300$\%$ less than \textit{FT}. From these results we can confirm that the fingerprinting is not helping, as observed when analyzing the rewards. In high traffic load, the results for waiting time follow the same pattern as for the rewards in high load: \textit{PEMR + FP} slightly outperforms \textit{PEMR}. Overall, no DRL approach learns a good performance for high load in the amount of time given for the training.
 
-To further analyse the results, we have looked into unexpectedly bad performance of fingerprinting. One possibility is that the fingerprint might not be able to further improve the performance as prioritized experience replay is already good enough to deal with the non-stationarity without adding fingerprints. To test this hypothesis, we run an experiment using only \textbf{normal experience replay (EMR)}. The figure \ref{fig:ERMIDQNExp} shows this additional experiment which compares \textit{EMR} against \textit{PEMR + FP}. Both techniques learn well, but \textit{PEMR + FP} obtains higher rewards outperforming \textit{ERM} by around 45$\%$ in the highest point of \textit{PEMR + FP}. Figure \ref{fig:ERMIDQNAWT} illustrates how they get a similar performance in waiting time, but \textit{EMR} is more stable than \textit{PEMR + FP} by not producing peeks. We conclude the Prioritized Experience Replay helps to deal with the non-stationarity by getting bigger rewards, which indicates that \textit{PEMR} has better performance than \textit{EMR}. These results prove that \textit{PEMR} can be good enough to deal with the non-stationarity. Potentially \textit{PEMR + FP} could be improved by selecting a better fingerprint, but we leave further investigation into this for future work.
-
+To further analyse the results, we have looked into unexpectedly bad performance of fingerprinting. One possibility is that the fingerprint might not be able to improve the performance as prioritized experience replay is already good enough to deal with the non-stationarity without adding fingerprints. To test this hypothesis, we run an experiment using only \textbf{normal experience replay (EMR)}. The figure \ref{fig:ERMIDQNExp} shows this additional experiment which compares \textit{EMR} against \textit{PEMR + FP}. Both techniques learn well, but \textit{PEMR + FP} obtains higher rewards outperforming \textit{ERM} by around 45$\%$ in the highest point of \textit{PEMR + FP}. Figure \ref{fig:ERMIDQNAWT} illustrates how they get a similar performance in waiting time, but \textit{EMR} is more stable than \textit{PEMR + FP} by not producing peeks. We conclude the Prioritized Experience Replay helps to deal with the non-stationarity by getting bigger rewards, which indicates that \textit{PEMR} has better performance than \textit{EMR}. These results prove that \textit{PEMR} can be good enough to deal with the non-stationarity. Potentially \textit{PEMR + FP} could be improved by selecting a better fingerprint, but we leave this for future work.
 \begin{figure}[!htbp]
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
@@ -365,12 +322,13 @@ To further analyse the results, we have looked into unexpectedly bad performance
     \end{subfigure}
     \caption{Low Traffic IDQN Experiments with Standard ERM}\label{fig:ERMIDQNExp}
 \end{figure}
-
-
 \section{Conclusion and future work} \label{conclusion}
 
-This paper presented IDQN as the first approach in literature to addresses heterogeneous multi-agent DRL in UTC. We evaluated IDQN's performance with different configurations in low and high traffic loads. Our experiments showed that IDQN is a suitable techniques for heterogeneous multi-agent UTC environments which can deal with the non-stationarity. The best results were obtained in the low traffic load. The high traffic load requires further investigation, by either fine-tuning hyperparamters to high load or allowing for the longer training time. We demonstrated that the experience replay is mandatory to learn efficiently, but that the fingerprint we chose did not enhance the prioritized experience replay. Therefore, further investigation is needed to evaluate if different fingerprints could improve the performance. Further, our technique should be evaluated against standard RL approaches, to investigate if more fine-grained sensor data enabled by the use of DRL approaches improves the performance over standard approaches.
+This paper presented IDQN as the first approach in literature to addresses heterogeneous multi-agent DRL in UTC. We evaluated IDQN's performance with different configurations in low and high traffic loads. Our experiments showed that IDQN is a suitable techniques for heterogeneous multi-agent UTC environments which can deal with the non-stationarity. The best results were obtained in the low traffic load. The high traffic load requires further investigation, by either fine-tuning hyper-parameters or allowing for the longer training time. We demonstrated that the experience replay is mandatory to learn efficiently, but that the fingerprint we chose did not enhance the prioritized experience replay. Therefore, further investigation is needed to evaluate if different fingerprints could improve the performance. Further, our technique should be evaluated against standard RL approaches, to investigate if more fine-grained sensor data enabled by the use of DRL approaches improves the performance over standard approaches.
 
+\section{Acknowledgements}
+
+This publication has emanated from research supported in part by a research grant from Science Foundation Ireland (SFI) under Grant Number 13/RC/2077 and 16/SP/3804
 
 % --- BIBLIOGRAPHY
 \bibliographystyle{splncs03}
